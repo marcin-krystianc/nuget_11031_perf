@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  ITERATION_COUNT: 10
+  ITERATION_COUNT: 1
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
 
@@ -38,4 +38,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: results
-          path: .\scripts\perftests\results.csv
+          path: results.csv

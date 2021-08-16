@@ -1,4 +1,4 @@
-name: CI
+name: benchmark_dotnet_windows
 
 on:
   push:

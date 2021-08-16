@@ -11,7 +11,7 @@ env:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
 
 jobs:
-  dotnet on windows-2019:
+  benchmark_dotnet_windows:
     runs-on: windows-2019
     steps:
 

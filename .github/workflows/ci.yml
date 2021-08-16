@@ -29,7 +29,7 @@ jobs:
         run: |
           .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\dev-838751441\NuGet.CommandLine\bin\Release\net472\NuGet.exe -solutionFilePath .\orleans\Orleans.sln -resultsFilePath results.csv -skipCleanRestores -skipnop -skipColdRestores -skipNoOpRestores -iterationCount ${ITERATION_COUNT}
           .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\dev-838751441\NuGet.CommandLine\bin\Release\net472\NuGet.exe -solutionFilePath .\orleans\Orleans.sln -resultsFilePath results.csv -skipCleanRestores -skipnop -skipColdRestores -skipNoOpRestores -iterationCount ${ITERATION_COUNT}
-       - name: Upload test results
+      - name: Upload test results
         uses: actions/upload-artifact@v2
         with:
           name: results

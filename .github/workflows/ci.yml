@@ -20,11 +20,11 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 5.0.x
-      - name: checkout test solutions
-        run: |
-          git clone --recursive https://github.com/dotnet/orleans
-          git clone --recursive https://github.com/OrchardCMS/OrchardCore.git
-          git clone --recursive https://github.com/NuGet/NuGet.Client.git
+#      - name: checkout test solutions
+#        run: |
+#          git clone --recursive https://github.com/dotnet/orleans
+#          git clone --recursive https://github.com/OrchardCMS/OrchardCore.git
+#          git clone --recursive https://github.com/NuGet/NuGet.Client.git
       - name: benchmark
         run: |
           .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath ..\..\artifacts\dev-838751441\NuGet.CommandLine\bin\Release\net472\NuGet.exe -solutionFilePath .\orleans\Orleans.sln -resultsFilePath results.csv -skipCleanRestores -skipNoOpRestores -skipColdRestores -iterationCount ${ITERATION_COUNT}

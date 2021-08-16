@@ -263,17 +263,6 @@ Function RunPerformanceTestsOnGitRepository(
         -staticGraphRestore:$staticGraphRestore
 }
 
-Function GetProcessorInfo()
-{
-    $processorInfo = Get-WmiObject Win32_processor
-
-    Return @{
-        Name = $processorInfo | Select-Object -ExpandProperty Name
-        NumberOfCores = $processorInfo | Select-Object -ExpandProperty NumberOfCores
-        NumberOfLogicalProcessors = $processorInfo | Select-Object -ExpandProperty NumberOfLogicalProcessors
-    }
-}
-
 Function LogDotNetSdkInfo()
 {
     Try

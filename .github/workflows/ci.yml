@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+env:
+  ITERATION_COUNT: 10
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  test:
+    runs-on: windows-2019
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup .NET SDK v5.0.x
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.x
+      - name: checkout test solutions
+        run: |
+          git clone --recursive https://github.com/dotnet/orleans
+          git clone --recursive https://github.com/OrchardCMS/OrchardCore.git
+          git clone --recursive https://github.com/NuGet/NuGet.Client.git
+      - name: benchmark
+        run: |
+          .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\dev-838751441\NuGet.CommandLine\bin\Release\net472\NuGet.exe -solutionFilePath .\orleans\Orleans.sln -resultsFilePath results.csv -skipCleanRestores -skipnop -skipColdRestores -skipNoOpRestores -iterationCount  ${ITERATION_COUNT}
+       - name: Upload test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: results
+          path: .\scripts\perftests\results.csv

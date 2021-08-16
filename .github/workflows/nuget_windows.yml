@@ -33,13 +33,13 @@ jobs:
 
       - name: benchmark
         run: |
-          .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\dev-838751441\NuGet.CommandLine\bin\Release\net472\NuGet.exe -solutionFilePath .\orleans\Orleans.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{ITERATION_COUNT}}
-          .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\dev-838751441\NuGet.CommandLine\bin\Release\net472\NuGet.exe -solutionFilePath .\OrchardCore\OrchardCore.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{ITERATION_COUNT}}
-          .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\dev-838751441\NuGet.CommandLine\bin\Release\net472\NuGet.exe -solutionFilePath .\NuGet.Client\NuGet.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{ITERATION_COUNT}}
+          .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\dev-838751441\NuGet.CommandLine\bin\Release\net472\NuGet.exe -solutionFilePath .\orleans\Orleans.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${ITERATION_COUNT}
+          .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\dev-838751441\NuGet.CommandLine\bin\Release\net472\NuGet.exe -solutionFilePath .\OrchardCore\OrchardCore.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${ITERATION_COUNT}
+          .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\dev-838751441\NuGet.CommandLine\bin\Release\net472\NuGet.exe -solutionFilePath .\NuGet.Client\NuGet.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${ITERATION_COUNT}
    
-          .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\nommap-5a8b1c47a\NuGet.CommandLine\bin\Release\net472\NuGet.exe -solutionFilePath .\orleans\Orleans.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{ITERATION_COUNT}}
-          .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\nommap-5a8b1c47a\NuGet.CommandLine\bin\Release\net472\NuGet.exe -solutionFilePath .\OrchardCore\OrchardCore.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{ITERATION_COUNT}}
-          .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\nommap-5a8b1c47a\NuGet.CommandLine\bin\Release\net472\NuGet.exe -solutionFilePath .\NuGet.Client\NuGet.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{ITERATION_COUNT}}
+          .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\nommap-5a8b1c47a\NuGet.CommandLine\bin\Release\net472\NuGet.exe -solutionFilePath .\orleans\Orleans.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${ITERATION_COUNT}
+          .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\nommap-5a8b1c47a\NuGet.CommandLine\bin\Release\net472\NuGet.exe -solutionFilePath .\OrchardCore\OrchardCore.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${ITERATION_COUNT}
+          .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\nommap-5a8b1c47a\NuGet.CommandLine\bin\Release\net472\NuGet.exe -solutionFilePath .\NuGet.Client\NuGet.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${ITERATION_COUNT}
 
       - name: Upload test results
         uses: actions/upload-artifact@v2

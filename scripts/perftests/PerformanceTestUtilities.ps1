@@ -89,7 +89,7 @@ function GetClientName([string]$nugetClient)
 
 function IsClientDotnetExe([string]$nugetClient)
 {
-    return $nugetClient.EndsWith("dotnet.exe")
+    return $nugetClient.EndsWith("dotnet.exe") || $nugetClient.EndsWith("dotnet")
 }
 
 function IsClientMSBuildExe([string]$nugetClient)

@@ -22,8 +22,18 @@ jobs:
         run: |
           curl -sSL https://download.visualstudio.microsoft.com/download/pr/c974c8da-7693-41c9-a874-712918a8964e/1d9223b00447537fef5f863cfa88cf80/dotnet-sdk-6.0.100-preview.7.21379.14-win-x64.zip -o dotnet.zip
           Expand-Archive dotnet.zip -DestinationPath dotnet
-          Copy-Item -Path .\dotnet\sdk\6.0.100-preview.7.21379.14 -Destination .\dotnet\sdk\6.0.100-dev-838751441
-          Get-ChildItem .\dotnet\sdk
+          
+          Copy-Item -Path .\dotnet\sdk\6.0.100-preview.7.21379.14 -Destination .\dotnet\sdk\6.0.100-dev.838751441
+          Copy-Item -Path .\artifacts\dev-838751441\NuGet.Build.Tasks\bin\Release\netstandard2.0\* -Destination .\dotnet\sdk\6.0.100-dev.838751441\
+          $content = Get-Content -Path '.\dotnet\sdk\6.0.100-dev.838751441\.version'
+          $content = $content -replace '6.0.100-preview.7.21379.14', '6.0.100-dev.838751441'
+          Set-Content -Path '.\dotnet\sdk\6.0.100-dev.838751441\.version' -Value $content
+          
+          Copy-Item -Path .\dotnet\sdk\6.0.100-preview.7.21379.14 -Destination .\dotnet\sdk\6.0.100-nommap.5a8b1c47a
+          Copy-Item -Path .\artifacts\nommap.5a8b1c47a\NuGet.Build.Tasks\bin\Release\netstandard2.0\* -Destination .\dotnet\sdk\6.0.100-nommap.5a8b1c47a\
+          $content = Get-Content -Path '.\dotnet\sdk\6.0.100-nommap.5a8b1c47a\.version'
+          $content = $content -replace '6.0.100-preview.7.21379.14', '6.0.100-nommap.5a8b1c47a'
+          Set-Content -Path '.\dotnet\sdk\6.0.100-nommap.5a8b1c47a\.version' -Value $content
 
 #      - name: Checkout test solutions
 #        run: |

@@ -36,9 +36,9 @@ jobs:
           $content = $content -replace '6.0.100-preview.7.21379.14', '6.0.100-nommap.5a8b1c47a'
           Set-Content -Path '.\dotnet\sdk\6.0.100-nommap.5a8b1c47a\.version' -Value $content
 
-#      - name: Checkout test solutions
-#        run: |
-#          git clone --recursive https://github.com/dotnet/orleans
+      - name: Checkout test solutions
+        run: |
+          git clone --recursive https://github.com/dotnet/orleans
 #          git clone --recursive https://github.com/OrchardCMS/OrchardCore.git
 #          git clone --recursive https://github.com/NuGet/NuGet.Client.git
 
@@ -48,7 +48,12 @@ jobs:
           reg ADD "HKLM\Software\Microsoft\StrongName\Verification\*,*" /f
           reg DELETE "HKLM\Software\Wow6432Node\Microsoft\StrongName\Verification" /f
           reg ADD "HKLM\Software\Wow6432Node\Microsoft\StrongName\Verification\*,*" /f
-
+          
+      - name: benchmark
+        run: |
+           Set-Content -Path '.\orleans\global.json' -Value '{"sdk": { "version": "dev.838751441" } }'
+          .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath .\orleans\Orleans.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount 15 -staticGraphRestore
+    
       - name: Upload test results
         uses: actions/upload-artifact@v2
         with:

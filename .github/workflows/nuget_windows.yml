@@ -12,7 +12,7 @@ env:
 
 jobs:
   benchmark_nuget_windows:
-    runs-onxxx: windows-2019
+    runs-on: windows-2019
     steps:
 
       - name: Checkout
@@ -45,4 +45,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: results
-          path: results.csv
+          path: results_windows_nuget.csv

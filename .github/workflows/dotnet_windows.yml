@@ -23,15 +23,18 @@ jobs:
       - name: Download .NET Core SDK
         run: |
           curl -sSL https://download.visualstudio.microsoft.com/download/pr/c974c8da-7693-41c9-a874-712918a8964e/1d9223b00447537fef5f863cfa88cf80/dotnet-sdk-6.0.100-preview.7.21379.14-win-x64.zip -o dotnet.zip
-          
           Expand-Archive dotnet.zip -DestinationPath dotnet
-          
+
+      - name: Prepare v6.0.100-${{env.BASE_VERSION}}
+        run: |
           Copy-Item -Path .\dotnet\sdk\6.0.100-preview.7.21379.14 -Destination .\dotnet\sdk\6.0.100-${{env.BASE_VERSION}} -Recurse
           Copy-Item -Path .\artifacts\${{env.BASE_VERSION}}\NuGet.Build.Tasks\bin\Release\netstandard2.0\* -Destination .\dotnet\sdk\6.0.100-${{env.BASE_VERSION}}
           $content = Get-Content -Path .\dotnet\sdk\6.0.100-${{env.BASE_VERSION}}\.version
           $newcontent = $content -replace '6.0.100-preview.7.21379.14', '6.0.100-${{env.BASE_VERSION}}'
           Set-Content -Path '.\dotnet\sdk\6.0.100-${{env.BASE_VERSION}}\.version' -Value $newcontent
-          
+
+      - name: Prepare v6.0.100-${{env.BRANCH_VERSION}}
+        run: |
           Copy-Item -Path .\dotnet\sdk\6.0.100-preview.7.21379.14 -Destination .\dotnet\sdk\6.0.100-${{env.BRANCH_VERSION}} -Recurse
           Copy-Item -Path .\artifacts\${{env.BRANCH_VERSION}}\NuGet.Build.Tasks\bin\Release\netstandard2.0\* -Destination .\dotnet\sdk\6.0.100-${{env.BRANCH_VERSION}}\
           $content = Get-Content -Path '.\dotnet\sdk\6.0.100-${{env.BRANCH_VERSION}}\.version'
@@ -52,18 +55,18 @@ jobs:
           reg DELETE "HKLM\Software\Wow6432Node\Microsoft\StrongName\Verification" /f
           reg ADD "HKLM\Software\Wow6432Node\Microsoft\StrongName\Verification\*,*" /f
           
-      - name: benchmark
+      - name: Benchmark v6.0.100-${{env.BASE_VERSION}}
         run: |
           Set-Content -Path 'global.json' -Value '{"sdk": { "version": "6.0.100-${{env.BASE_VERSION}}" } }'
-          .\dotnet\dotnet.exe --info
           .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath .\orleans\Orleans.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
-    
+          
+      - name: Benchmark v6.0.100-${{env.BRANCH_VERSION}}
+        run: |
           Set-Content -Path 'global.json' -Value '{"sdk": { "version": "6.0.100-${{env.BRANCH_VERSION}}" } }'
-          .\dotnet\dotnet.exe --info
           .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath .\orleans\Orleans.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
      
       - name: Upload test results
         uses: actions/upload-artifact@v2
         with:
           name: results
-          path: results.csv
+          path: results_windows_dotnet.csv

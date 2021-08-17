@@ -56,6 +56,7 @@ jobs:
           Remove-Item -Path '.\orleans\global.json'
           Set-Content -Path 'global.json' -Value '{"sdk": { "version": "dev.838751441" } }'
           Get-Content -Path global.json
+          Get-Content -Path .\dotnet\sdk\6.0.100-dev.838751441\.version
           .\dotnet\dotnet.exe --info
           .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath .\orleans\Orleans.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
     

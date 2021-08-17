@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  ITERATION_COUNT: 15
+  ITERATION_COUNT: 5
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
 
@@ -51,7 +51,9 @@ jobs:
           
       - name: benchmark
         run: |
-          Set-Content -Path '.\orleans\global.json' -Value '{"sdk": { "version": "dev.838751441" } }'
+          Remove-Item -Path '.\orleans\global.json'
+          Set-Content -Path 'global.json' -Value '{"sdk": { "version": "dev.838751441" } }'
+          .\dotnet\dotnet.exe --info
           .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath .\orleans\Orleans.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
     
           Set-Content -Path '.\orleans\global.json' -Value '{"sdk": { "version": "6.0.100-nommap.5a8b1c47a" } }'

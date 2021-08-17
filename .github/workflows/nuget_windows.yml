@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  ITERATION_COUNT: 15
+  ITERATION_COUNT: 5
   BASE_VERSION: dev.838751441
   BRANCH_VERSION: nommap.5a8b1c47a
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
@@ -46,5 +46,5 @@ jobs:
       - name: Upload test results
         uses: actions/upload-artifact@v2
         with:
-          name: results
-          path: results_windows_nuget.csv
+          name: results_windows_nuget
+          path: results.csv

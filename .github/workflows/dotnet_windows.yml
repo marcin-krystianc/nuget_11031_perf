@@ -68,5 +68,5 @@ jobs:
       - name: Upload test results
         uses: actions/upload-artifact@v2
         with:
-          name: results
-          path: results_windows_dotnet.csv
+          name: results_windows_dotnet
+          path: results.csv

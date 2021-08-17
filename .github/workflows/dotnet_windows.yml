@@ -51,7 +51,7 @@ jobs:
           
       - name: benchmark
         run: |
-           Set-Content -Path '.\orleans\global.json' -Value '{"sdk"&#58; { "version"&#58; "dev.838751441" } }'
+           Set-Content -Path '.\orleans\global.json' -Value '{"sdk"`
           .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath .\orleans\Orleans.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount 15 -staticGraphRestore
     
       - name: Upload test results

@@ -54,7 +54,7 @@ jobs:
       - name: benchmark
         run: |
           Remove-Item -Path '.\orleans\global.json'
-          Set-Content -Path 'global.json' -Value '{"sdk": { "version": "dev.838751441" } }'
+          Set-Content -Path 'global.json' -Value '{"sdk": { "version": "6.0.100-dev.838751441" } }'
           Get-Content -Path global.json
           Get-Content -Path .\dotnet\sdk\6.0.100-dev.838751441\.version
           .\dotnet\dotnet.exe --info

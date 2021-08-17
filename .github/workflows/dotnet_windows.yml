@@ -52,7 +52,7 @@ jobs:
       - name: benchmark
         run: |
           Set-Content -Path '.\orleans\global.json' -Value '{"sdk": { "version": "dev.838751441" } }'
-          .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath .\orleans\Orleans.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount "${ITERATION_COUNT}" -staticGraphRestore
+          .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath .\orleans\Orleans.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
     
           Set-Content -Path '.\orleans\global.json' -Value '{"sdk": { "version": "6.0.100-nommap.5a8b1c47a" } }'
           .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath .\orleans\Orleans.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount 5 -staticGraphRestore

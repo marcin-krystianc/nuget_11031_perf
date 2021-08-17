@@ -26,21 +26,22 @@ jobs:
           
           Expand-Archive dotnet.zip -DestinationPath dotnet
           
-          Copy-Item -Path .\dotnet\sdk\6.0.100-preview.7.21379.14 -Destination .\dotnet\sdk\6.0.100-dev.838751441 -Recurse
-          Copy-Item -Path .\artifacts\dev-838751441\NuGet.Build.Tasks\bin\Release\netstandard2.0\* -Destination .\dotnet\sdk\6.0.100-dev.838751441
-          $content = Get-Content -Path .\dotnet\sdk\6.0.100-dev.838751441\.version
-          $newcontent = $content -replace '6.0.100-preview.7.21379.14', '6.0.100-dev.838751441'
-          Set-Content -Path '.\dotnet\sdk\6.0.100-dev.838751441\.version' -Value $newcontent
+          Copy-Item -Path .\dotnet\sdk\6.0.100-preview.7.21379.14 -Destination .\dotnet\sdk\6.0.100-${{env.BASE_VERSION}} -Recurse
+          Copy-Item -Path .\artifacts\${{env.BASE_VERSION}}\NuGet.Build.Tasks\bin\Release\netstandard2.0\* -Destination .\dotnet\sdk\6.0.100-${{env.BASE_VERSION}}
+          $content = Get-Content -Path .\dotnet\sdk\6.0.100-${{env.BASE_VERSION}}\.version
+          $newcontent = $content -replace '6.0.100-preview.7.21379.14', '6.0.100-${{env.BASE_VERSION}}'
+          Set-Content -Path '.\dotnet\sdk\6.0.100-${{env.BASE_VERSION}}\.version' -Value $newcontent
           
-          Copy-Item -Path .\dotnet\sdk\6.0.100-preview.7.21379.14 -Destination .\dotnet\sdk\6.0.100-nommap.5a8b1c47a -Recurse
-          Copy-Item -Path .\artifacts\nommap-5a8b1c47a\NuGet.Build.Tasks\bin\Release\netstandard2.0\* -Destination .\dotnet\sdk\6.0.100-nommap.5a8b1c47a\
-          $content = Get-Content -Path '.\dotnet\sdk\6.0.100-nommap.5a8b1c47a\.version'
-          $newcontent = $content -replace '6.0.100-preview.7.21379.14', '6.0.100-nommap.5a8b1c47a'
-          Set-Content -Path '.\dotnet\sdk\6.0.100-nommap.5a8b1c47a\.version' -Value $newcontent
+          Copy-Item -Path .\dotnet\sdk\6.0.100-preview.7.21379.14 -Destination .\dotnet\sdk\6.0.100-${{env.BRANCH_VERSION}} -Recurse
+          Copy-Item -Path .\artifacts\${{env.BRANCH_VERSION}}\NuGet.Build.Tasks\bin\Release\netstandard2.0\* -Destination .\dotnet\sdk\6.0.100-${{env.BRANCH_VERSION}}\
+          $content = Get-Content -Path '.\dotnet\sdk\6.0.100-${{env.BRANCH_VERSION}}\.version'
+          $newcontent = $content -replace '6.0.100-preview.7.21379.14', '6.0.100-${{env.BRANCH_VERSION}}'
+          Set-Content -Path '.\dotnet\sdk\6.0.100-${{env.BRANCH_VERSION}}\.version' -Value $newcontent
 
       - name: Checkout test solutions
         run: |
           git clone --recursive https://github.com/dotnet/orleans
+          Remove-Item -Path '.\orleans\global.json'
 #          git clone --recursive https://github.com/OrchardCMS/OrchardCore.git
 #          git clone --recursive https://github.com/NuGet/NuGet.Client.git
 
@@ -53,14 +54,12 @@ jobs:
           
       - name: benchmark
         run: |
-          Remove-Item -Path '.\orleans\global.json'
-          Set-Content -Path 'global.json' -Value '{"sdk": { "version": "6.0.100-dev.838751441" } }'
-          Get-Content -Path global.json
-          Get-Content -Path .\dotnet\sdk\6.0.100-dev.838751441\.version
+          Set-Content -Path 'global.json' -Value '{"sdk": { "version": "6.0.100-${{env.BASE_VERSION}}" } }'
           .\dotnet\dotnet.exe --info
           .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath .\orleans\Orleans.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
     
-          Set-Content -Path '.\orleans\global.json' -Value '{"sdk": { "version": "6.0.100-nommap.5a8b1c47a" } }'
+          Set-Content -Path 'global.json' -Value '{"sdk": { "version": "6.0.100-${{env.BRANCH_VERSION}}" } }'
+          .\dotnet\dotnet.exe --info
           .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath .\orleans\Orleans.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
      
       - name: Upload test results

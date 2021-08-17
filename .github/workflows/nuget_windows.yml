@@ -12,7 +12,7 @@ env:
 
 jobs:
   benchmark_nuget_windows:
-    runs-on: windows-2019
+    runs-onxxx: windows-2019
     steps:
 
       - name: Checkout

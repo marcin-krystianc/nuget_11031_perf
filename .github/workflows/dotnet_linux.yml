@@ -57,7 +57,7 @@ jobs:
       - name: Benchmark
         shell: pwsh
         run: |
-          $solutions = @("NuGet.Client", "OrchardCore", "orleans")
+          $solutions = @("OrchardCore", "orleans")
           $versions = @("${{env.BASE_VERSION}}", "${{env.BRANCH_VERSION}}", "${{env.BASE_VERSION}}", "${{env.BRANCH_VERSION}}")
           ForEach ($solution In $solutions) {
           ForEach ($version In $versions) {

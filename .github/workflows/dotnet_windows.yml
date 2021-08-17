@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  ITERATION_COUNT: 5
+  ITERATION_COUNT: 15
   BASE_VERSION: dev.838751441
   BRANCH_VERSION: nommap.5a8b1c47a
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
@@ -44,9 +44,11 @@ jobs:
       - name: Checkout test solutions
         run: |
           git clone --recursive https://github.com/dotnet/orleans
-          Remove-Item -Path '.\orleans\global.json'
-#          git clone --recursive https://github.com/OrchardCMS/OrchardCore.git
-#          git clone --recursive https://github.com/NuGet/NuGet.Client.git
+          git clone --recursive https://github.com/OrchardCMS/OrchardCore.git
+          git clone --recursive https://github.com/NuGet/NuGet.Client.git
+          Remove-Item -Path 'orleans\global.json'
+          Remove-Item -Path 'OrchardCore\global.json'
+          Remove-Item -Path 'NuGet.Client\global.json'
 
       - name: Disable strong name verification
         run: |
@@ -59,11 +61,15 @@ jobs:
         run: |
           Set-Content -Path 'global.json' -Value '{"sdk": { "version": "6.0.100-${{env.BASE_VERSION}}" } }'
           .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath .\orleans\Orleans.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
+          .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath .\OrchardCore\OrchardCore.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
+          .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath .\NuGet.Client\NuGet.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
           
       - name: Benchmark v6.0.100-${{env.BRANCH_VERSION}}
         run: |
           Set-Content -Path 'global.json' -Value '{"sdk": { "version": "6.0.100-${{env.BRANCH_VERSION}}" } }'
           .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath .\orleans\Orleans.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
+          .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath .\OrchardCore\OrchardCore.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
+          .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath .\NuGet.Client\NuGet.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
      
       - name: Upload test results
         uses: actions/upload-artifact@v2

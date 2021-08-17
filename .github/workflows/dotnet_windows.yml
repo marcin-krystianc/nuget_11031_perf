@@ -51,7 +51,7 @@ jobs:
           
       - name: benchmark
         run: |
-           Set-Content -Path '.\orleans\global.json' -Value 'aaa'
+          Set-Content -Path '.\orleans\global.json' -Value 'aaa'
           .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath .\orleans\Orleans.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount 15 -staticGraphRestore
     
       - name: Upload test results

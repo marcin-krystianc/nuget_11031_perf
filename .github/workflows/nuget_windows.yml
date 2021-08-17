@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  ITERATION_COUNT: 15
+  ITERATION_COUNT: 5
   BASE_VERSION: dev.838751441
   BRANCH_VERSION: nommap.5a8b1c47a
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
@@ -33,15 +33,19 @@ jobs:
           reg DELETE "HKLM\Software\Wow6432Node\Microsoft\StrongName\Verification" /f
           reg ADD "HKLM\Software\Wow6432Node\Microsoft\StrongName\Verification\*,*" /f
 
-      - name: benchmark
+      - name: Benchmark
+        shell: pwsh
         run: |
-          .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\${{env.BASE_VERSION}}\NuGet.CommandLine\bin\Release\net472\NuGet.exe -solutionFilePath .\orleans\Orleans.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount 15
-          .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\${{env.BASE_VERSION}}\NuGet.CommandLine\bin\Release\net472\NuGet.exe -solutionFilePath .\OrchardCore\OrchardCore.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount 15
-          .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\${{env.BASE_VERSION}}\NuGet.CommandLine\bin\Release\net472\NuGet.exe -solutionFilePath .\NuGet.Client\NuGet.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount 15
-   
-          .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\${{env.BRANCH_VERSION}}\NuGet.CommandLine\bin\Release\net472\NuGet.exe -solutionFilePath .\orleans\Orleans.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount 15
-          .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\${{env.BRANCH_VERSION}}\NuGet.CommandLine\bin\Release\net472\NuGet.exe -solutionFilePath .\OrchardCore\OrchardCore.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount 15
-          .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\${{env.BRANCH_VERSION}}\NuGet.CommandLine\bin\Release\net472\NuGet.exe -solutionFilePath .\NuGet.Client\NuGet.sln -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount 15
+          $solutions = @("NuGet.Client", "OrchardCore", "orleans")
+          $versions = @("${{env.BASE_VERSION}}", "${{env.BRANCH_VERSION}}")
+          For ($i=0; $i -lt 2; $i++) {
+              ForEach ($solution In $solutions) {
+                  ForEach ($version In $versions) {
+                    Set-Content -Path 'global.json' -Value '{"sdk": { "version": "6.0.100-$versions" } }'
+                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\$version\NuGet.CommandLine\bin\Release\net472\NuGet.exe  -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
+                  }
+              }
+          }
 
       - name: Upload test results
         uses: actions/upload-artifact@v2

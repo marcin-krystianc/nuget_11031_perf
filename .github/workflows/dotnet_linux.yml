@@ -57,6 +57,8 @@ jobs:
               ForEach ($solution In $solutions) {
                   ForEach ($version In $versions) {
                     Set-Content -Path 'global.json' -Value '{"sdk": { "version": "6.0.100-$version" } }'
+                    dotnet/dotnet --info
+                    dotnet/dotnet --version
                     .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath dotnet/dotnet -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
                   }
               }

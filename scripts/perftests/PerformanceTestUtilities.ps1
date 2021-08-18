@@ -173,7 +173,7 @@ Function GetClientVersion([string] $nugetClientFilePath)
 {
     If (IsClientDotnetExe $nugetClientFilePath)
     {
-        $version = $nugetClientFilePath --version
+        $version = . $nugetClientFilePath --version
     }
     ElseIf($(IsClientMSBuildExe $nugetClientFilePath))
     {

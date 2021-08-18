@@ -171,6 +171,8 @@ Function LocalsClearAll([string] $nugetClientFilePath)
 # Gets the client version
 Function GetClientVersion([string] $nugetClientFilePath)
 {
+    $nugetClientFilePath = GetAbsolutePath $nugetClientFilePath
+
     If (IsClientDotnetExe $nugetClientFilePath)
     {
         $version = . $nugetClientFilePath --version

@@ -56,7 +56,7 @@ jobs:
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {
                   ForEach ($version In $versions) {
-                    Set-Content -Path global.json -Value '{"sdk": { "version": "6.0.100-$version" } }'
+                    Set-Content -Path global.json -Value '{"sdk": { "version": "6.0.100-' + $version + '" } }'
                     Get-Content -Path global.json
                     dotnet/dotnet --info
                     dotnet/dotnet --version                    

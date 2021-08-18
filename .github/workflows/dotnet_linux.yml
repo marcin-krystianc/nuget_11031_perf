@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  ITERATION_COUNT: 10
+  ITERATION_COUNT: 1
   BASE_VERSION: dev.838751441
   BRANCH_VERSION: nommap.5a8b1c47a
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
@@ -34,9 +34,12 @@ jobs:
           ForEach ($version In $versions) {
               Copy-Item -Path .\dotnet\sdk\6.0.100-preview.7.21379.14 -Destination .\dotnet\sdk\6.0.100-$version -Recurse
               Copy-Item -Path .\artifacts\$version\NuGet.Build.Tasks\bin\Release\netstandard2.0\* -Destination .\dotnet\sdk\6.0.100-$version
+              Get-Content -Path .\dotnet\sdk\6.0.100-$version\.version
               $content = Get-Content -Path .\dotnet\sdk\6.0.100-$version\.version
               $newcontent = $content -replace "6.0.100-preview.7.21379.14", "6.0.100-$version"
               Set-Content -Path .\dotnet\sdk\6.0.100-$version\.version -Value $newcontent
+              Get-Content -Path .\dotnet\sdk\6.0.100-$version\.version
+              Get-ChildItem .\dotnet\sdk\
           }
 
       - name: Checkout test solutions

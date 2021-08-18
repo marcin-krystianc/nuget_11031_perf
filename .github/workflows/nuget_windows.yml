@@ -41,7 +41,6 @@ jobs:
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {
                   ForEach ($version In $versions) {
-                    Set-Content -Path 'global.json' -Value '{"sdk": { "version": "6.0.100-$versions" } }'
                     .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\$version\NuGet.CommandLine\bin\Release\net472\NuGet.exe  -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
                   }
               }

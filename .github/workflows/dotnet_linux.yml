@@ -28,7 +28,7 @@ jobs:
           New-Item -Name "dotnet" -ItemType "directory"
           tar -xf dotnet.tar.gz -C dotnet
           echo "$GITHUB_WORKSPACE/dotnet" >> $GITHUB_PATH
-          echo $GITHUB_PATH
+          Get-Content $GITHUB_PATH
           
       - name: Prepare test SDKs
         shell: pwsh

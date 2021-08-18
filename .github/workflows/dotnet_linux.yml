@@ -28,7 +28,7 @@ jobs:
           New-Item -Name "dotnet" -ItemType "directory"
           tar -xf dotnet.tar.gz -C dotnet
           echo "bbb"
-          Get-Content -Path $env:GITHUB_PATH
+          Get-Content -Path $GITHUB_PATH
           echo "aaa"
 
       - name: Prepare test SDKs

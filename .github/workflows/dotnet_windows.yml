@@ -15,7 +15,7 @@ env:
 
 jobs:
   benchmark_dotnet_windows:
-    runs-on: windows-latest
+    runs-on-qqqq: windows-latest
     steps:
 
       - name: Checkout

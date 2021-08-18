@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  ITERATION_COUNT: 1
+  ITERATION_COUNT: 10
   BASE_VERSION: dev.838751441
   BRANCH_VERSION: nommap.5a8b1c47a
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
@@ -14,7 +14,7 @@ env:
 
 jobs:
   benchmark_nuget_windows:
-    runs-on-qqqq: windows-2019
+    runs-on: windows-2019
     steps:
 
       - name: Checkout

@@ -68,7 +68,7 @@ jobs:
                   ForEach ($version In $versions) {
                     $sdk = '{"sdk": { "version": "6.0.100-' + $version + '" } }'
                     Set-Content -Path global.json -Value $sdk   
-                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore -skipCleanRestores
+                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
                   }
               }
           }

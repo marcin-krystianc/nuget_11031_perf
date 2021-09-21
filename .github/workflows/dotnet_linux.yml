@@ -21,10 +21,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         
-      - name: Download .NET Core SDK 6.0.100-rc.1.21458.32
+      - name: Download .NET Core SDK 6.0.100-${{env.BASE_VERSION}}
         shell: pwsh
         run: |
-          curl -sSL https://download.visualstudio.microsoft.com/download/pr/18b0aaba-3d6c-4051-8694-eac3439d070d/a2848819e18f2e84657ddd4c98aee02d/dotnet-sdk-6.0.100-rc.1.21458.32-linux-arm64.tar.gz -o dotnet.tar.gz
+          curl -sSL https://download.visualstudio.microsoft.com/download/pr/4880c5a4-9c22-47a7-b298-651f1294a385/795f7828d8684059705e625b33027f89/dotnet-sdk-6.0.100-rc.1.21458.32-linux-x64.tar.gz -o dotnet.tar.gz
           New-Item -Name "dotnet" -ItemType "directory"
           tar -xf dotnet.tar.gz -C dotnet
           # Add(prepend) local dotnet to the system PATH

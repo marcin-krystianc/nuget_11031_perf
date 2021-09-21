@@ -21,7 +21,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         
-      - name: Download .NET Core SDK 6.0.100-preview.7.21379.14
+      - name: Download .NET Core SDK 6.0.100-${{env.BASE_VERSION}}
         shell: pwsh
         run: |
           curl -sSL https://download.visualstudio.microsoft.com/download/pr/ce3fd989-b69d-439a-9cac-09ad40597db8/2848d49480b6e7b1b2a18cfa46d724e2/dotnet-sdk-6.0.100-preview.7.21379.14-linux-x64.tar.gz -o dotnet.tar.gz

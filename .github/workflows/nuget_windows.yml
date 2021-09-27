@@ -6,9 +6,9 @@ on:
   workflow_dispatch:
 
 env:
-  ITERATION_COUNT: 10
+  ITERATION_COUNT: 50
   BASE_VERSION: dev.071a62f73
-  BRANCH_VERSION: chainpredicate.076f14509
+  BRANCH_VERSION: chainpredicate.523b7ab3a
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
 

@@ -40,7 +40,7 @@ jobs:
         shell: pwsh
         run: |
           $solutions = @("NuGet.Client", "OrchardCore", "orleans")
-          $versions = @("${{env.BASE_VERSION}}", "${{env.BRANCH_VERSION}}")
+          $versions = @("${{env.DEV_VERSION}}", "${{env.BRANCH_VERSION}}")
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {
                   ForEach ($version In $versions) {

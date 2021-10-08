@@ -7,7 +7,7 @@ on:
 
 env:
   ITERATION_COUNT: 10
-  BASE_VERSION: preview.7.21379.14
+  BASE_VERSION: rc.1.21458.32
   DEV_VERSION: dev.b089e4ca6
   BRANCH_VERSION: io.0c9de781f
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
@@ -24,7 +24,7 @@ jobs:
       - name: Download .NET Core SDK 6.0.100-${{env.BASE_VERSION}}
         shell: pwsh
         run: |
-          curl -sSL https://download.visualstudio.microsoft.com/download/pr/ce3fd989-b69d-439a-9cac-09ad40597db8/2848d49480b6e7b1b2a18cfa46d724e2/dotnet-sdk-6.0.100-preview.7.21379.14-linux-x64.tar.gz -o dotnet.tar.gz
+          curl -sSL https://download.visualstudio.microsoft.com/download/pr/4880c5a4-9c22-47a7-b298-651f1294a385/795f7828d8684059705e625b33027f89/dotnet-sdk-6.0.100-rc.1.21458.32-linux-x64.tar.gz -o dotnet.tar.gz
           New-Item -Name "dotnet" -ItemType "directory"
           tar -xf dotnet.tar.gz -C dotnet
           # Add(prepend) local dotnet to the system PATH

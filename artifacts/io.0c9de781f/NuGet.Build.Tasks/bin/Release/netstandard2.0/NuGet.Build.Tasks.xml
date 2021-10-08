@@ -1,0 +1,1111 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NuGet.Build.Tasks</name>
+    </assembly>
+    <members>
+        <member name="M:NuGet.Build.Tasks.BuildTasksUtility.AddAllProjectsForRestore(NuGet.ProjectModel.DependencyGraphSpec)">
+            <summary>
+            Add all restorable projects to the restore list.
+            This is the behavior for --recursive
+            </summary>
+        </member>
+        <member name="M:NuGet.Build.Tasks.BuildTasksUtility.DoesProjectSupportRestore(NuGet.ProjectModel.PackageSpec)">
+            <summary>
+            Determines if the specified <see cref="T:NuGet.ProjectModel.PackageSpec" /> supports restore.
+            </summary>
+            <param name="packageSpec">A <see cref="T:NuGet.ProjectModel.PackageSpec" /> for a project.</param>
+            <returns><code>true</code> if the project supports restore, otherwise <code>false</code>.</returns>
+        </member>
+        <member name="M:NuGet.Build.Tasks.BuildTasksUtility.GetProjectRestoreStyleFromProjectProperty(System.String)">
+            <summary>
+            Try to parse the <paramref name="restoreProjectStyleProperty"/> and return the <see cref="T:NuGet.ProjectModel.ProjectStyle"/> value.
+            </summary>
+            <param name="restoreProjectStyleProperty">The value of the RestoreProjectStyle property value. It can be null.</param>
+            <returns>The <see cref="T:NuGet.ProjectModel.ProjectStyle"/>. If the <paramref name="restoreProjectStyleProperty"/> is null the return vale will be null. </returns>
+        </member>
+        <member name="M:NuGet.Build.Tasks.BuildTasksUtility.GetProjectRestoreStyle(System.Nullable{NuGet.ProjectModel.ProjectStyle},System.Boolean,System.String,System.String,System.String,NuGet.Common.ILogger)">
+            <summary>
+            Determines the restore style of a project.
+            </summary>
+            <param name="restoreProjectStyle">An optional user supplied restore style.</param>
+            <param name="hasPackageReferenceItems">A <see cref="T:System.Boolean"/> indicating whether or not the project has any PackageReference items.</param>
+            <param name="projectJsonPath">An optional path to the project's project.json file.</param>
+            <param name="projectDirectory">The full path to the project directory.</param>
+            <param name="projectName">The name of the project file.</param>
+            <param name="log">An <see cref="T:NuGet.Common.ILogger"/> object used to log messages.</param>
+            <returns>A <see cref="T:System.Tuple`2"/> containing the project style and a value indicating if the project is using a style that is compatible with PackageReference.
+            If the value of <paramref name="restoreProjectStyle"/> is not empty and could not be parsed, <code>null</code> is returned.</returns>
+        </member>
+        <member name="M:NuGet.Build.Tasks.BuildTasksUtility.GetProjectRestoreStyle(System.String,System.Boolean,System.String,System.String,System.String,NuGet.Common.ILogger)">
+            <summary>
+            Determines the restore style of a project.
+            </summary>
+            <param name="restoreProjectStyle">An optional user supplied restore style.</param>
+            <param name="hasPackageReferenceItems">A <see cref="T:System.Boolean"/> indicating whether or not the project has any PackageReference items.</param>
+            <param name="projectJsonPath">An optional path to the project's project.json file.</param>
+            <param name="projectDirectory">The full path to the project directory.</param>
+            <param name="projectName">The name of the project file.</param>
+            <param name="log">An <see cref="T:NuGet.Common.ILogger"/> object used to log messages.</param>
+            <returns>A <see cref="T:System.Tuple`2"/> containing the project style and a value indicating if the project is using a style that is compatible with PackageReference.
+            If the value of <paramref name="restoreProjectStyle"/> is not empty and could not be parsed, <code>null</code> is returned.</returns>
+        </member>
+        <member name="M:NuGet.Build.Tasks.BuildTasksUtility.ProjectHasPackagesConfigFile(System.String,System.String,System.String@)">
+            <summary>
+            Determines if the project has a packages.config file.
+            </summary>
+            <param name="projectDirectory">The full path of the project directory.</param>
+            <param name="projectName">The name of the project file.</param>
+            <param name="packagesConfigPath">Receives the full path to the packages.config file if one exists, otherwise <code>null</code>.</param>
+            <returns><code>true</code> if a packages.config exists next to the project, otherwise <code>false</code>.</returns>
+        </member>
+        <member name="M:NuGet.Build.Tasks.BuildTasksUtility.GetFallbackFolders(System.String,System.String,System.String[],System.String[],System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String},NuGet.Configuration.ISettings)">
+            <summary>
+            Gets the package fallback folders for a project.
+            </summary>
+            <param name="startupDirectory">The start-up directory of the tool.</param>
+            <param name="projectDirectory">The full path to the directory of the project.</param>
+            <param name="fallbackFolders">A <see cref="T:string[]" /> containing the fallback folders for the project.</param>
+            <param name="fallbackFoldersOverride">A <see cref="T:string[]" /> containing overrides for the fallback folders for the project.</param>
+            <param name="additionalProjectFallbackFolders">An <see cref="T:System.Collections.Generic.IEnumerable`1" /> containing additional fallback folders for the project.</param>
+            <param name="additionalProjectFallbackFoldersExcludes">An <see cref="T:System.Collections.Generic.IEnumerable`1" /> containing fallback folders to exclude.</param>
+            <param name="settings">An <see cref="T:NuGet.Configuration.ISettings" /> object containing settings for the project.</param>
+            <returns>A <see cref="T:string[]" /> containing the package fallback folders for the project.</returns>
+        </member>
+        <member name="T:NuGet.Build.Tasks.ConsoleOutLogMessage">
+            <summary>
+            Represents a log message that can be serialized and sent across a text stream like <see cref="P:System.Console.Out" />.
+            </summary>
+        </member>
+        <member name="F:NuGet.Build.Tasks.ConsoleOutLogMessage.SerializerSettings">
+            <summary>
+            Serialization settings for messages.  These should be set to be as fast as possible and not for friendly
+            display since no user will ever see them.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.ConsoleOutLogMessage.Code">
+            <inheritdoc cref="P:Microsoft.Build.Framework.BuildMessageEventArgs.Code" />
+        </member>
+        <member name="P:NuGet.Build.Tasks.ConsoleOutLogMessage.ColumnNumber">
+            <inheritdoc cref="P:Microsoft.Build.Framework.BuildMessageEventArgs.ColumnNumber" />
+        </member>
+        <member name="P:NuGet.Build.Tasks.ConsoleOutLogMessage.EndColumnNumber">
+            <inheritdoc cref="P:Microsoft.Build.Framework.BuildMessageEventArgs.EndColumnNumber" />
+        </member>
+        <member name="P:NuGet.Build.Tasks.ConsoleOutLogMessage.EndLineNumber">
+            <inheritdoc cref="P:Microsoft.Build.Framework.BuildMessageEventArgs.EndLineNumber" />
+        </member>
+        <member name="P:NuGet.Build.Tasks.ConsoleOutLogMessage.File">
+            <inheritdoc cref="P:Microsoft.Build.Framework.BuildMessageEventArgs.File" />
+        </member>
+        <member name="P:NuGet.Build.Tasks.ConsoleOutLogMessage.HelpKeyword">
+            <inheritdoc cref="P:Microsoft.Build.Framework.BuildEventArgs.HelpKeyword" />
+        </member>
+        <member name="P:NuGet.Build.Tasks.ConsoleOutLogMessage.Importance">
+            <inheritdoc cref="P:Microsoft.Build.Framework.BuildMessageEventArgs.Importance" />
+        </member>
+        <member name="P:NuGet.Build.Tasks.ConsoleOutLogMessage.LineNumber">
+            <inheritdoc cref="P:Microsoft.Build.Framework.BuildMessageEventArgs.LineNumber" />
+        </member>
+        <member name="P:NuGet.Build.Tasks.ConsoleOutLogMessage.Message">
+            <inheritdoc cref="P:Microsoft.Build.Framework.BuildEventArgs.Message" />
+        </member>
+        <member name="P:NuGet.Build.Tasks.ConsoleOutLogMessage.MessageType">
+            <summary>
+            Gets or sets the type of the message.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.ConsoleOutLogMessage.ProjectFile">
+            <inheritdoc cref="P:Microsoft.Build.Framework.BuildMessageEventArgs.ProjectFile" />
+        </member>
+        <member name="P:NuGet.Build.Tasks.ConsoleOutLogMessage.SenderName">
+            <inheritdoc cref="P:Microsoft.Build.Framework.BuildEventArgs.SenderName" />
+        </member>
+        <member name="P:NuGet.Build.Tasks.ConsoleOutLogMessage.Subcategory">
+            <inheritdoc cref="P:Microsoft.Build.Framework.BuildMessageEventArgs.Subcategory" />
+        </member>
+        <member name="M:NuGet.Build.Tasks.ConsoleOutLogMessage.op_Implicit(Microsoft.Build.Framework.BuildMessageEventArgs)~NuGet.Build.Tasks.ConsoleOutLogMessage">
+            <summary>
+            Implicitly converts a <see cref="T:Microsoft.Build.Framework.BuildMessageEventArgs" /> object to a <see cref="T:NuGet.Build.Tasks.ConsoleOutLogMessage" /> object.
+            </summary>
+            <param name="buildMessageEventArgs">The <see cref="T:Microsoft.Build.Framework.BuildMessageEventArgs" /> object to convert.</param>
+        </member>
+        <member name="M:NuGet.Build.Tasks.ConsoleOutLogMessage.op_Implicit(Microsoft.Build.Framework.BuildWarningEventArgs)~NuGet.Build.Tasks.ConsoleOutLogMessage">
+            <summary>
+            Implicitly converts a <see cref="T:Microsoft.Build.Framework.BuildWarningEventArgs" /> object to a <see cref="T:NuGet.Build.Tasks.ConsoleOutLogMessage" /> object.
+            </summary>
+            <param name="buildWarningEventArgs">The <see cref="T:Microsoft.Build.Framework.BuildWarningEventArgs" /> object to convert.</param>
+        </member>
+        <member name="M:NuGet.Build.Tasks.ConsoleOutLogMessage.op_Implicit(Microsoft.Build.Framework.BuildErrorEventArgs)~NuGet.Build.Tasks.ConsoleOutLogMessage">
+            <summary>
+            Implicitly converts a <see cref="T:Microsoft.Build.Framework.BuildErrorEventArgs" /> object to a <see cref="T:NuGet.Build.Tasks.ConsoleOutLogMessage" /> object.
+            </summary>
+            <param name="buildErrorEventArgs">The <see cref="T:Microsoft.Build.Framework.BuildErrorEventArgs" /> object to convert.</param>
+        </member>
+        <member name="T:NuGet.Build.Tasks.ConsoleOutLogMessageType">
+            <summary>
+            Represents the type of a console out log message.
+            </summary>
+        </member>
+        <member name="F:NuGet.Build.Tasks.ConsoleOutLogMessageType.None">
+            <summary>
+            The type was not specified.
+            </summary>
+        </member>
+        <member name="F:NuGet.Build.Tasks.ConsoleOutLogMessageType.Error">
+            <summary>
+            The message is an error.
+            </summary>
+        </member>
+        <member name="F:NuGet.Build.Tasks.ConsoleOutLogMessageType.Warning">
+            <summary>
+            The message is a warning.
+            </summary>
+        </member>
+        <member name="F:NuGet.Build.Tasks.ConsoleOutLogMessageType.Message">
+            <summary>
+            The message is a message.
+            </summary>
+        </member>
+        <member name="T:NuGet.Build.Tasks.GenerateRestoreGraphFileTask">
+            <summary>
+            Represents an MSBuild task that performs a command-line based restore.
+            </summary>
+        </member>
+        <member name="F:NuGet.Build.Tasks.GenerateRestoreGraphFileTask.ThisAssemblyLazy">
+            <summary>
+            Gets the full path to this assembly.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GenerateRestoreGraphFileTask.IsSolutionPathDefined">
+            <summary>
+            Gets a value indicating whether or not <see cref="P:NuGet.Build.Tasks.GenerateRestoreGraphFileTask.SolutionPath" /> contains a value.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GenerateRestoreGraphFileTask.MSBuildBinPath">
+            <summary>
+            Gets or sets the full path to the directory containing MSBuild.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GenerateRestoreGraphFileTask.ProjectFullPath">
+            <summary>
+            Gets or sets the full path to the current project file.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GenerateRestoreGraphFileTask.Recursive">
+            <summary>
+            Get or sets a value indicating whether or not the restore should restore all projects or just the entry project.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GenerateRestoreGraphFileTask.SolutionPath">
+            <summary>
+            Gets or sets the full path to the solution file (if any) that is being built.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GenerateRestoreGraphFileTask.ProcessFileName">
+            <summary>
+            The path to the file to start the additional process with.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GenerateRestoreGraphFileTask.MSBuildStartupDirectory">
+            <summary>
+            MSBuildStartupDirectory - Used to calculate relative paths
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GenerateRestoreGraphFileTask.RestoreGraphOutputPath">
+            <summary>
+            RestoreGraphOutputPath - The location to write the output to.
+            </summary>
+        </member>
+        <member name="M:NuGet.Build.Tasks.GenerateRestoreGraphFileTask.Cancel">
+            <inheritdoc cref="M:Microsoft.Build.Framework.ICancelableTask.Cancel" />
+        </member>
+        <member name="M:NuGet.Build.Tasks.GenerateRestoreGraphFileTask.Dispose">
+            <inheritdoc cref="M:System.IDisposable.Dispose" />
+        </member>
+        <member name="M:NuGet.Build.Tasks.GenerateRestoreGraphFileTask.Execute">
+            <inheritdoc cref="M:Microsoft.Build.Utilities.Task.Execute" />
+        </member>
+        <member name="M:NuGet.Build.Tasks.GenerateRestoreGraphFileTask.GetCommandLineArguments">
+            <summary>
+            Gets the command-line arguments to use when launching the process that executes the restore.
+            </summary>
+            <returns>An <see cref="T:System.Collections.Generic.IEnumerable`1" /> containing the command-line arguments that need to separated by spaces and surrounded by quotes.</returns>
+        </member>
+        <member name="M:NuGet.Build.Tasks.GenerateRestoreGraphFileTask.GetProcessFileName(System.String)">
+            <summary>
+            Gets the file name of the process.
+            </summary>
+            <returns>The full path to the file for the process.</returns>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetCentralPackageVersionsTask.ProjectUniqueName">
+            <summary>
+            Full path to the msbuild project.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetCentralPackageVersionsTask.CentralPackageVersions">
+            <summary>
+            Central package versions.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetCentralPackageVersionsTask.TargetFrameworks">
+            <summary>
+            Target frameworks to apply this for. If empty this applies to all.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetCentralPackageVersionsTask.RestoreGraphItems">
+            <summary>
+            Output items
+            </summary>
+        </member>
+        <member name="T:NuGet.Build.Tasks.GetProjectTargetFrameworksTask">
+            <summary>
+            Determine the project's targetframework(s) based
+            on the available properties.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetProjectTargetFrameworksTask.ProjectPath">
+            <summary>
+            Full path to the msbuild project.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetProjectTargetFrameworksTask.TargetFrameworkMoniker">
+            <summary>
+            Optional TargetFrameworkMoniker property value.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetProjectTargetFrameworksTask.TargetPlatformIdentifier">
+            <summary>
+            Optional TargetPlatformIdentifier property value.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetProjectTargetFrameworksTask.TargetPlatformMinVersion">
+            <summary>
+            Optional TargetPlatformMinVersion property value.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetProjectTargetFrameworksTask.TargetPlatformVersion">
+            <summary>
+            Optional TargetPlatformVersion property value.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetProjectTargetFrameworksTask.TargetFrameworks">
+            <summary>
+            Optional TargetFrameworks property value.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetProjectTargetFrameworksTask.TargetFramework">
+            <summary>
+            Optional TargetFrameworks property value.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetProjectTargetFrameworksTask.ProjectTargetFrameworks">
+            <summary>
+            ; delimited list of target frameworks for the project.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetReferenceNearestTargetFrameworkTask.CurrentProjectName">
+            <summary>
+            The current project's name.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetReferenceNearestTargetFrameworkTask.CurrentProjectTargetFramework">
+            <summary>
+            The current project's target framework.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetReferenceNearestTargetFrameworkTask.CurrentProjectTargetPlatform">
+            <summary>
+            Optional TargetPlatformMoniker
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetReferenceNearestTargetFrameworkTask.FallbackTargetFrameworks">
+            <summary>
+            Optional list of target frameworks to be used as Fallback target frameworks.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetReferenceNearestTargetFrameworkTask.AnnotatedProjectReferences">
+            <summary>
+            The project references for property lookup.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetReferenceNearestTargetFrameworkTask.AssignedProjects">
+            <summary>
+            The project references with assigned properties.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreDotnetCliToolsTask.ProjectPath">
+            <summary>
+            Full path to the msbuild project.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreDotnetCliToolsTask.RestoreGraphItems">
+            <summary>
+            Output items
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreDotnetCliToolsTask.ToolFramework">
+            <summary>
+            Tool runtime framework where this will be executed.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreDotnetCliToolsTask.RestoreSources">
+            <summary>
+            NuGet sources
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreDotnetCliToolsTask.RestoreFallbackFolders">
+            <summary>
+            NuGet fallback folders
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreDotnetCliToolsTask.RestorePackagesPath">
+            <summary>
+            User packages folder
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreDotnetCliToolsTask.RestoreConfigFilePaths">
+            <summary>
+            Config File Paths used
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreFrameworkReferencesTask.ProjectUniqueName">
+            <summary>
+            Full path to the msbuild project.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreFrameworkReferencesTask.TargetFrameworks">
+            <summary>
+            Target frameworks to apply this for. If empty this applies to all.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreFrameworkReferencesTask.RestoreGraphItems">
+            <summary>
+            Output items
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestorePackageDownloadsTask.ProjectUniqueName">
+            <summary>
+            Full path to the msbuild project.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestorePackageDownloadsTask.TargetFrameworks">
+            <summary>
+            Target frameworks to apply this for. If empty this applies to all.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestorePackageDownloadsTask.RestoreGraphItems">
+            <summary>
+            Output items
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestorePackageReferencesTask.ProjectUniqueName">
+            <summary>
+            Full path to the msbuild project.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestorePackageReferencesTask.TargetFrameworks">
+            <summary>
+            Target frameworks to apply this for. If empty this applies to all.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestorePackageReferencesTask.RestoreGraphItems">
+            <summary>
+            Output items
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreProjectJsonPathTask.ProjectPath">
+            <summary>
+            Full path to the msbuild project.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreProjectJsonPathTask.ProjectJsonPath">
+            <summary>
+            Output path to project.json if it exists.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreProjectReferencesTask.ProjectUniqueName">
+            <summary>
+            Full path to the msbuild project.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreProjectReferencesTask.ParentProjectPath">
+            <summary>
+            Root project path used for resolving the absolute path.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreProjectReferencesTask.TargetFrameworks">
+            <summary>
+            Target frameworks to apply this for. If empty this applies to all.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreProjectReferencesTask.RestoreGraphItems">
+            <summary>
+            Output items
+            </summary>
+        </member>
+        <member name="T:NuGet.Build.Tasks.GetRestoreProjectStyleTask">
+            <summary>
+            Gets the project style.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreProjectStyleTask.HasPackageReferenceItems">
+            <summary>
+            Gets or sets a value indicating whether or not the project has any PackageReference items.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreProjectStyleTask.MSBuildProjectDirectory">
+            <summary>
+            Gets or sets the full path to the project directory.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreProjectStyleTask.MSBuildProjectName">
+            <summary>
+            Gets or sets the name of the project file.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreProjectStyleTask.ProjectJsonPath">
+            <summary>
+            The path to a project.json file.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreProjectStyleTask.ProjectStyle">
+            <summary>
+            Gets or sets the <see cref="T:NuGet.ProjectModel.ProjectStyle"/> of the project.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreProjectStyleTask.RestoreProjectStyle">
+            <summary>
+            Gets or sets the user specified project style of the project.
+            </summary>
+        </member>
+        <member name="T:NuGet.Build.Tasks.GetRestoreSettingsTask">
+            <summary>
+            Get all the settings to be used for project restore.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreSettingsTask.RestoreRootConfigDirectory">
+            <summary>
+            The root directory from which to talk to find the config files. Used by the CLI in Dotnet Tool install
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreSettingsTask.RestoreSettingsPerFramework">
+            <summary>
+            Settings read with TargetFramework set
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreSettingsTask.RestorePackagesPathOverride">
+            <summary>
+            Command line value of RestorePackagesPath
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreSettingsTask.RestoreSourcesOverride">
+            <summary>
+            Command line value of RestoreSources
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreSettingsTask.RestoreFallbackFoldersOverride">
+            <summary>
+            Command line value of RestoreFallbackFolders
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreSettingsTask.RestoreProjectStyle">
+            <summary>
+            Restore style for the project
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreSettingsTask.MSBuildStartupDirectory">
+            <summary>
+            Original working directory
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreSettingsTask.OutputSources">
+            <summary>
+            Output items
+            </summary>
+        </member>
+        <member name="M:NuGet.Build.Tasks.GetRestoreSettingsTask.GetPropertyValues(Microsoft.Build.Framework.ITaskItem[],System.String)">
+            <summary>
+            Read a metadata property from each item and split the values.
+            Nulls and empty values are ignored.
+            </summary>
+        </member>
+        <member name="M:NuGet.Build.Tasks.GetRestoreSettingsTask.GetGlobalAbsolutePath(System.String)">
+            <summary>
+            Resolve a path against MSBuildStartupDirectory
+            </summary>
+        </member>
+        <member name="T:NuGet.Build.Tasks.GetRestoreSolutionProjectsTask">
+            <summary>
+            Convert .metaproj paths to project paths.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreSolutionProjectsTask.ProjectReferences">
+            <summary>
+            Solution project references.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreSolutionProjectsTask.SolutionFilePath">
+            <summary>
+            Root path used for resolving the absolute project paths.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.GetRestoreSolutionProjectsTask.OutputProjectReferences">
+            <summary>
+            Output items
+            </summary>
+        </member>
+        <member name="T:NuGet.Build.Tasks.LoggingQueue`1">
+            <summary>
+            Represents a queue of logging messages that need to be processed.
+            </summary>
+            <typeparam name="T">The type of object to be added to the queue.</typeparam>
+        </member>
+        <member name="F:NuGet.Build.Tasks.LoggingQueue`1._queue">
+            <summary>
+            Stores the queue of actions to be executed.
+            </summary>
+        </member>
+        <member name="M:NuGet.Build.Tasks.LoggingQueue`1.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NuGet.Build.Tasks.LoggingQueue`1" /> class.
+            </summary>
+            <param name="maxDegreeOfParallelism">The maximum number of messages that can be processed at a time.</param>
+        </member>
+        <member name="M:NuGet.Build.Tasks.LoggingQueue`1.Enqueue(`0)">
+            <summary>
+            Enqueues a logging message to be processed.
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NuGet.Build.Tasks.LoggingQueue`1.Process(`0)">
+            <summary>
+            Processes an item in the queue.
+            </summary>
+            <param name="item">The item to be processed.</param>
+        </member>
+        <member name="T:NuGet.Build.Tasks.NuGetMessageTask">
+            <summary>
+            A task that logs a message from the localized <see cref="T:NuGet.Build.Tasks.Strings"/> resource.
+            </summary>
+        </member>
+        <member name="T:NuGet.Build.Tasks.RestoreSettingsUtils">
+            <summary>
+            This class contains the logic for the settings using during restore. 
+            It contains methods with the settings precedence logic as well.
+            </summary>
+        </member>
+        <member name="M:NuGet.Build.Tasks.RestoreSettingsUtils.GetValue``1(System.Func{``0}[])">
+            <summary>
+            Return the value from the first function that returns non-null.
+            </summary>
+        </member>
+        <member name="T:NuGet.Build.Tasks.RestoreTask">
+            <summary>
+            .NET Core compatible restore task for PackageReference and UWP project.json projects.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.RestoreTask.RestoreGraphItems">
+            <summary>
+            DG file entries
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.RestoreTask.RestoreDisableParallel">
+            <summary>
+            Disable parallel project restores and downloads
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.RestoreTask.RestoreNoCache">
+            <summary>
+            Disable the web cache
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.RestoreTask.RestoreIgnoreFailedSources">
+            <summary>
+            Ignore errors from package sources
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.RestoreTask.RestoreRecursive">
+            <summary>
+            Restore all projects.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.RestoreTask.RestoreForce">
+            <summary>
+            Force restore, skip no op
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.RestoreTask.HideWarningsAndErrors">
+            <summary>
+            Do not display Errors and Warnings to the user. 
+            The Warnings and Errors are written into the assets file and will be read by an sdk target.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.RestoreTask.Interactive">
+            <summary>
+            Set this property if you want to get an interactive restore
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.RestoreTask.RestoreForceEvaluate">
+            <summary>
+            Reevaluate resotre graph even with a lock file, skip no op as well.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.RestoreTask.RestorePackagesConfig">
+            <summary>
+            Restore projects using packages.config for dependencies.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:NuGet.Build.Tasks.RestoreTaskEx">
+            <summary>
+            Represents an MSBuild task that performs a command-line based restore.
+            </summary>
+        </member>
+        <member name="F:NuGet.Build.Tasks.RestoreTaskEx.ThisAssemblyLazy">
+            <summary>
+            Gets the full path to this assembly.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.RestoreTaskEx.CleanupAssetsForUnsupportedProjects">
+            <summary>
+            Gets or sets a value indicating whether or not assets should be deleted for projects that don't support PackageReference.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.RestoreTaskEx.DisableParallel">
+            <summary>
+            Gets or sets a value indicating whether or not parallel restore should be enabled.
+            Defaults to <code>false</code> if the current machine only has a single processor.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.RestoreTaskEx.Force">
+            <summary>
+            Gets or sets a value indicating whether or not, in PackageReference based projects, all dependencies should be resolved
+            even if the last restore was successful. Specifying this flag is similar to deleting the project.assets.json file. This
+            does not bypass the http-cache.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.RestoreTaskEx.ForceEvaluate">
+            <summary>
+            Gets or sets a value indicating whether or not to recompute the dependencies and update the lock file without any warning.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.RestoreTaskEx.HideWarningsAndErrors">
+            <summary>
+            Gets or sets a value indicating whether or not warnings and errors should be logged.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.RestoreTaskEx.IgnoreFailedSources">
+            <summary>
+            Gets or sets a value indicating whether or not to ignore failing or missing package sources.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.RestoreTaskEx.Interactive">
+            <summary>
+            Gets or sets a value indicating whether or not the restore is allowed to interact with the user through a prompt or dialog.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.RestoreTaskEx.IsSolutionPathDefined">
+            <summary>
+            Gets a value indicating whether or not <see cref="P:NuGet.Build.Tasks.RestoreTaskEx.SolutionPath" /> contains a value.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.RestoreTaskEx.MSBuildBinPath">
+            <summary>
+            Gets or sets the full path to the directory containing MSBuild.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.RestoreTaskEx.NoCache">
+            <summary>
+            Gets or sets a value indicating whether or not to avoid using cached packages.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.RestoreTaskEx.ProjectFullPath">
+            <summary>
+            Gets or sets the full path to the current project file.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.RestoreTaskEx.Recursive">
+            <summary>
+            Get or sets a value indicating whether or not the restore should restore all projects or just the entry project.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.RestoreTaskEx.RestorePackagesConfig">
+            <summary>
+            Gets or sets a value indicating whether or not to restore projects using packages.config.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.RestoreTaskEx.SolutionPath">
+            <summary>
+            Gets or sets the full path to the solution file (if any) that is being built.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.RestoreTaskEx.ProcessFileName">
+            <summary>
+            The path to the file to start the additional process with.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.RestoreTaskEx.MSBuildStartupDirectory">
+            <summary>
+            MSBuildStartupDirectory - Used to calculate relative paths
+            </summary>
+        </member>
+        <member name="M:NuGet.Build.Tasks.RestoreTaskEx.Cancel">
+            <inheritdoc cref="M:Microsoft.Build.Framework.ICancelableTask.Cancel" />
+        </member>
+        <member name="M:NuGet.Build.Tasks.RestoreTaskEx.Dispose">
+            <inheritdoc cref="M:System.IDisposable.Dispose" />
+        </member>
+        <member name="M:NuGet.Build.Tasks.RestoreTaskEx.Execute">
+            <inheritdoc cref="M:Microsoft.Build.Utilities.Task.Execute" />
+        </member>
+        <member name="M:NuGet.Build.Tasks.RestoreTaskEx.GetCommandLineArguments">
+            <summary>
+            Gets the command-line arguments to use when launching the process that executes the restore.
+            </summary>
+            <returns>An <see cref="T:System.Collections.Generic.IEnumerable`1" /> containing the command-line arguments that need to separated by spaces and surrounded by quotes.</returns>
+        </member>
+        <member name="M:NuGet.Build.Tasks.RestoreTaskEx.GetProcessFileName(System.String)">
+            <summary>
+            Gets the file name of the process.
+            </summary>
+            <returns>The full path to the file for the process.</returns>
+        </member>
+        <member name="T:NuGet.Build.Tasks.Strings">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.Strings.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.Strings.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.Strings.Argument_Cannot_Be_Null_Or_Empty">
+            <summary>
+              Looks up a localized string similar to Argument cannot be null or empty.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.Strings.CreatedDependencyGraphSpec">
+            <summary>
+              Looks up a localized string similar to Created DependencyGraphSpec in {0:D2}ms..
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.Strings.DeterminingProjectsToRestore">
+            <summary>
+              Looks up a localized string similar to Determining projects to restore....
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.Strings.Error_DgSpecGenerationFailed">
+            <summary>
+              Looks up a localized string similar to Cannot write the dependency graph spec because the generation failed..
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.Strings.Error_MissingRestoreGraphOutputPath">
+            <summary>
+              Looks up a localized string similar to Cannot write the dependency graph spec because the `RestoreGraphOutputPath` is missing..
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.Strings.Error_PackageDownload_OnlyExactVersionsAreAllowed">
+            <summary>
+              Looks up a localized string similar to &apos;{0}&apos; is not an exact version like &apos;[1.0.0]&apos;. Only exact versions are allowed with PackageDownload..
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.Strings.Error_PackagesConfigParseError">
+            <summary>
+              Looks up a localized string similar to Error parsing packages.config file at {0}: {1}.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.Strings.ImportsFallbackWarning">
+            <summary>
+              Looks up a localized string similar to ProjectReference &apos;{0}&apos; was resolved using &apos;{1}&apos; instead of the project target framework &apos;{2}&apos;. This project may not be fully compatible with your project..
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.Strings.InstallCommandNothingToInstall">
+            <summary>
+              Looks up a localized string similar to All packages listed in {0} are already installed..
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.Strings.Log_NoProjectsForRestore">
+            <summary>
+              Looks up a localized string similar to The solution did not have any projects to restore, ensure that all projects are known to be MSBuild and that the projects exist..
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.Strings.Log_ProjectsInSolutionNotKnowntoMSBuild">
+            <summary>
+              Looks up a localized string similar to The solution contains &apos;{0}&apos; project(s) &apos;{1}&apos; that are not known to MSBuild. Ensure that all projects are known to be MSBuild before running restore on the solution..
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.Strings.NoCompatibleTargetFramework">
+            <summary>
+              Looks up a localized string similar to Project &apos;{0}&apos; targets &apos;{2}&apos;. It cannot be referenced by a project that targets &apos;{1}&apos;..
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.Strings.NoProjectsProvidedToTask">
+            <summary>
+              Looks up a localized string similar to Unable to find a project to restore!.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.Strings.NoProjectsToRestore">
+            <summary>
+              Looks up a localized string similar to Nothing to do. None of the projects specified contain packages to restore..
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.Strings.ProjectEvaluationSummary">
+            <summary>
+              Looks up a localized string similar to Evaluated {0} project(s) in {1:D2}ms ({2} builds, {3} failures)..
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.Strings.RestoreCanceled">
+            <summary>
+              Looks up a localized string similar to Restore canceled!.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.Strings.RestoreNoSolutionFound">
+            <summary>
+              Looks up a localized string similar to No solution found. Restore against a solution or pass in /p:SolutionDir.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.Strings.UnsupportedFallbackFramework">
+            <summary>
+              Looks up a localized string similar to The project fallback framework &apos;{0}&apos; is not a supported target framework..
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.Strings.UnsupportedTargetFramework">
+            <summary>
+              Looks up a localized string similar to The project target framework &apos;{0}&apos; is not a supported target framework..
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.Strings.Warning_InvalidPackageSaveMode">
+            <summary>
+              Looks up a localized string similar to Invalid PackageSaveMode value &apos;{0}&apos;..
+            </summary>
+        </member>
+        <member name="T:NuGet.Build.Tasks.TaskLoggingQueue">
+            <summary>
+            Represents a logging queue for messages that eventually sent to a <see cref="T:Microsoft.Build.Utilities.TaskLoggingHelper" />.
+            </summary>
+        </member>
+        <member name="F:NuGet.Build.Tasks.TaskLoggingQueue._log">
+            <summary>
+            The <see cref="T:Microsoft.Build.Utilities.TaskLoggingHelper" /> to log messages to.
+            </summary>
+        </member>
+        <member name="M:NuGet.Build.Tasks.TaskLoggingQueue.#ctor(Microsoft.Build.Utilities.TaskLoggingHelper)">
+            <summary>
+            Initializes a new instance of the TaskLoggingHelperQueue class.
+            </summary>
+            <param name="taskLoggingHelper">The <see cref="T:Microsoft.Build.Utilities.Task" /> to create a logging queue for.</param>
+        </member>
+        <member name="M:NuGet.Build.Tasks.TaskLoggingQueue.Process(System.String)">
+            <summary>
+            Processes the specified logging message and logs in with a <see cref="T:Microsoft.Build.Utilities.TaskLoggingHelper" />.
+            </summary>
+            <param name="message">The JSON message to log.</param>
+        </member>
+        <member name="P:NuGet.Build.Tasks.WarnForInvalidProjectsTask.AllProjects">
+            <summary>
+            All known projects.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.WarnForInvalidProjectsTask.ValidProjects">
+            <summary>
+            All valid projects for restore.
+            </summary>
+        </member>
+        <member name="T:NuGet.Build.Tasks.WriteRestoreGraphTask">
+            <summary>
+            Generate dg file output.
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.WriteRestoreGraphTask.RestoreGraphItems">
+            <summary>
+            DG file entries
+            </summary>
+        </member>
+        <member name="P:NuGet.Build.Tasks.WriteRestoreGraphTask.RestoreRecursive">
+            <summary>
+            Restore all projects.
+            </summary>
+        </member>
+        <member name="M:NuGet.Build.Tasks.WriteRestoreGraphTask.GetNullForEmpty(System.String)">
+            <summary>
+            Convert empty strings to null
+            </summary>
+        </member>
+        <member name="T:NuGet.Build.MSBuildLogger">
+            <summary>
+            TaskLoggingHelper -> ILogger
+            </summary>
+        </member>
+        <member name="M:NuGet.Build.MSBuildLogger.LogForNonMono(NuGet.Common.INuGetLogMessage)">
+            <summary>
+            Log using with metadata for non mono platforms.
+            </summary>
+        </member>
+        <member name="M:NuGet.Build.MSBuildLogger.LogForMono(NuGet.Common.ILogMessage)">
+            <summary>
+            Log using basic methods to avoid missing methods on mono.
+            </summary>
+        </member>
+        <member name="T:NuGet.Build.MSBuildTaskItem">
+            <summary>
+            TaskItem wrapper
+            </summary>
+        </member>
+        <member name="M:NuGet.Shared.EqualityUtility.OrderedEquals``2(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},System.Collections.Generic.IComparer{``1},System.Collections.Generic.IEqualityComparer{``0})">
+            <summary>
+            Compares two enumberables for equality, ordered according to the specified key and optional comparer. Handles null values gracefully.
+            </summary>
+            <typeparam name="TSource">The type of the list</typeparam>
+            <typeparam name="TKey">The type of the sorting key</typeparam>
+            <param name="self">This list</param>
+            <param name="other">The other list</param>
+            <param name="keySelector">The function to extract the key from each item in the list</param>
+            <param name="orderComparer">An optional comparer for comparing keys</param>
+            <param name="sequenceComparer">An optional comparer for sequences</param>
+        </member>
+        <member name="M:NuGet.Shared.EqualityUtility.SequenceEqualWithNullCheck``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEqualityComparer{``0})">
+            <summary>
+            Compares two sequence for equality, allowing either sequence to be null. If one is null, both have to be
+            null for equality.
+            </summary>
+        </member>
+        <member name="M:NuGet.Shared.EqualityUtility.SetEqualsWithNullCheck``1(System.Collections.Generic.ISet{``0},System.Collections.Generic.ISet{``0},System.Collections.Generic.IEqualityComparer{``0})">
+            <summary>
+            Compares two sets for equality, allowing either sequence to be null.
+            If one is null, both have to be null for equality.
+            </summary>
+        </member>
+        <member name="T:NuGet.Shared.HashCodeCombiner">
+            <summary>
+            Hash code creator, based on the original NuGet hash code combiner/ASP hash code combiner implementations
+            </summary>
+        </member>
+        <member name="M:NuGet.Shared.HashCodeCombiner.GetHashCode``2(``0,``1)">
+            <summary>
+            Create a unique hash code for the given set of items
+            </summary>
+        </member>
+        <member name="M:NuGet.Shared.HashCodeCombiner.GetHashCode``3(``0,``1,``2)">
+            <summary>
+            Create a unique hash code for the given set of items
+            </summary>
+        </member>
+        <member name="M:NuGet.Shared.Extensions.AsList``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Return the enumerable as a List of T, copying if required. Optimized for common case where it is an List of T.
+            Avoid mutating the return value.
+            </summary>
+            <remarks>https://aspnetwebstack.codeplex.com/SourceControl/latest#src/Common/CollectionExtensions.cs</remarks>
+        </member>
+        <member name="M:NuGet.Shared.Extensions.AsHashSet``1(System.Collections.Generic.ISet{``0},System.Collections.Generic.IEqualityComparer{``0})">
+            <summary>
+            Return the ISet as a HashSet of T, copying if required. Optimized for common case where it is a HashSet of T.
+            Avoid mutating the return value.
+            </summary>
+        </member>
+        <member name="M:NuGet.Shared.XmlUtility.Load(System.String)">
+            <summary>
+            Creates a new <see cref="T:System.Xml.Linq.XDocument"/> from a file.
+            </summary>
+            <param name="path">The complete file path to be read into a new <see cref="T:System.Xml.Linq.XDocument"/>.</param>
+            <returns>An <see cref="T:System.Xml.Linq.XDocument"/> that contains the contents of the specified file.</returns>
+        </member>
+        <member name="M:NuGet.Shared.XmlUtility.Load(System.String,System.Xml.Linq.LoadOptions)">
+            <summary>
+            Creates a new <see cref="T:System.Xml.Linq.XDocument"/> from a file. Optionally, whitespace can be preserved.
+            </summary>
+            <param name="path">The complete file path to be read into a new <see cref="T:System.Xml.Linq.XDocument"/>.</param>
+            <param name="options">A set of <see cref="T:System.Xml.Linq.LoadOptions"/>.</param>
+            <returns>An <see cref="T:System.Xml.Linq.XDocument"/> that contains the contents of the specified file.</returns>
+        </member>
+        <member name="M:NuGet.Shared.XmlUtility.Load(System.IO.Stream)">
+            <summary>
+            Creates a new <see cref="T:System.Xml.Linq.XDocument"/> from a stream.
+            </summary>
+            <param name="input">The stream that contains the XML data.</param>
+            <returns>An <see cref="T:System.Xml.Linq.XDocument"/> that contains the contents of the specified stream.</returns>
+        </member>
+        <member name="M:NuGet.Shared.XmlUtility.Load(System.IO.Stream,System.Xml.Linq.LoadOptions)">
+            <summary>
+            Creates a new System.Xml.Linq.XDocument from a stream. Optionally, whitespace can be preserved.
+            </summary>
+            <param name="input">The stream that contains the XML data.</param>
+            <param name="options">A set of <see cref="T:System.Xml.Linq.LoadOptions"/>.</param>
+            <returns>An <see cref="T:System.Xml.Linq.XDocument"/> that contains the contents of the specified stream.</returns>
+        </member>
+        <member name="M:NuGet.Shared.XmlUtility.GetEncodedXMLName(System.String)">
+            <summary>
+            Converts the name to a valid XML local name, if it is invalid.
+            </summary>
+            <param name="name">The name to be encoded.</param>
+            <returns>The encoded name.</returns>
+        </member>
+        <member name="M:NuGet.Shared.XmlUtility.GetXmlReaderSettings(System.Xml.Linq.LoadOptions)">
+            <summary>
+            Creates an instance of <see cref="T:System.Xml.XmlReaderSettings"/> with safe settings
+            <param name="options">A set of <see cref="T:System.Xml.Linq.LoadOptions"/>.</param>
+            </summary>
+        </member>
+        <member name="T:NuGet.StringBuilderPool">
+            <summary>
+            Provides a resource pool that enables reusing instances of <see cref="T:System.Text.StringBuilder"/> instances.
+            </summary>
+            <remarks>
+            <para>
+            Renting and returning buffers with an <see cref="T:NuGet.StringBuilderPool"/> can increase performance
+            in situations where <see cref="T:System.Text.StringBuilder"/> instances are created and destroyed frequently,
+            resulting in significant memory pressure on the garbage collector.
+            </para>
+            <para>
+            This class is thread-safe.  All members may be used by multiple threads concurrently.
+            </para>
+            </remarks>
+        </member>
+        <member name="F:NuGet.StringBuilderPool.Shared">
+            <summary>
+            Retrieves a shared <see cref="T:NuGet.StringBuilderPool"/> instance.
+            </summary>
+        </member>
+        <member name="M:NuGet.StringBuilderPool.Rent(System.Int32)">
+            <summary>
+            Retrieves a <see cref="T:System.Text.StringBuilder"/> that is at least the requested length.
+            </summary>
+            <param name="minimumCapacity">The minimum capacity of the <see cref="T:System.Text.StringBuilder"/> needed.</param>
+            <returns>
+            A <see cref="T:System.Text.StringBuilder"/> that is at least <paramref name="minimumCapacity"/> in length.
+            </returns>
+            <remarks>
+            This buffer is loaned to the caller and should be returned to the same pool via
+            <see cref="M:NuGet.StringBuilderPool.Return(System.Text.StringBuilder)"/> so that it may be reused in subsequent usage of <see cref="M:NuGet.StringBuilderPool.Rent(System.Int32)"/>.
+            It is not a fatal error to not return a rented string builder, but failure to do so may lead to
+            decreased application performance, as the pool may need to create a new instance to replace
+            the one lost.
+            </remarks>
+        </member>
+        <member name="M:NuGet.StringBuilderPool.Return(System.Text.StringBuilder)">
+            <summary>
+            Returns to the pool an array that was previously obtained via <see cref="M:NuGet.StringBuilderPool.Rent(System.Int32)"/> on the same
+            <see cref="T:NuGet.StringBuilderPool"/> instance.
+            </summary>
+            <param name="builder">
+            The <see cref="T:System.Text.StringBuilder"/> previously obtained from <see cref="M:NuGet.StringBuilderPool.Rent(System.Int32)"/> to return to the pool.
+            </param>
+            <remarks>
+            Once a <see cref="T:System.Text.StringBuilder"/> has been returned to the pool, the caller gives up all ownership
+            of the instance and must not use it. The reference returned from a given call to <see cref="M:NuGet.StringBuilderPool.Rent(System.Int32)"/>
+            must only be returned via <see cref="M:NuGet.StringBuilderPool.Return(System.Text.StringBuilder)"/> once.  The default <see cref="T:NuGet.StringBuilderPool"/>
+            may hold onto the returned instance in order to rent it again, or it may release the returned instance
+            if it's determined that the pool already has enough instances stored.
+            </remarks>
+        </member>
+    </members>
+</doc>

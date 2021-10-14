@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  ITERATION_COUNT: 1
+  ITERATION_COUNT: 10
   BASE_VERSION: rc.1.21458.32
   BASE_VERSION_WINDOWS: https://download.visualstudio.microsoft.com/download/pr/575db146-cef0-45f8-8517-c874d62deac7/c63b8d10cc85f237f1a56935d0e85895/dotnet-sdk-6.0.100-rc.1.21458.32-win-x64.zip
   BASE_VERSION_LINUX: https://download.visualstudio.microsoft.com/download/pr/4880c5a4-9c22-47a7-b298-651f1294a385/795f7828d8684059705e625b33027f89/dotnet-sdk-6.0.100-rc.1.21458.32-linux-x64.tar.gz
@@ -40,8 +40,8 @@ jobs:
       - name: Benchmark
         shell: pwsh
         run: |
-          $solutions = @("NuGet.Client", "OrchardCore", "orleans", "TestSolutions/SanitisedNetCoreApp3.1Centralised")
-          $versions = @("${{env.DEV_VERSION}}", "${{env.BRANCH_VERSION}}")
+          $solutions = @("TestSolutions/SanitisedNetCoreApp3.1Centralised", "TestSolutions/SanitisedNetCoreApp3.1CentralisedOptimized")
+          $versions = @("${{env.DEV_VERSION}}")
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {
                   ForEach ($version In $versions) {
@@ -104,8 +104,8 @@ jobs:
       - name: Benchmark
         shell: pwsh
         run: |
-          $solutions = @("NuGet.Client", "OrchardCore", "orleans", "TestSolutions/SanitisedNetCoreApp3.1Centralised")
-          $versions = @("${{env.DEV_VERSION}}", "${{env.BRANCH_VERSION}}", "${{env.BASE_VERSION}}")
+          $solutions = @("TestSolutions/SanitisedNetCoreApp3.1Centralised", "TestSolutions/SanitisedNetCoreApp3.1CentralisedOptimized")
+          $versions = @("${{env.BASE_VERSION}}")
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {
                   ForEach ($version In $versions) {
@@ -163,8 +163,8 @@ jobs:
       - name: Benchmark
         shell: pwsh
         run: |
-          $solutions = @("OrchardCore", "orleans", "TestSolutions/SanitisedNetCoreApp3.1Centralised")
-          $versions = @("${{env.DEV_VERSION}}", "${{env.BRANCH_VERSION}}", "${{env.BASE_VERSION}}")
+          $solutions = @("TestSolutions/SanitisedNetCoreApp3.1Centralised", "TestSolutions/SanitisedNetCoreApp3.1CentralisedOptimized")
+          $versions = @("${{env.BASE_VERSION}}")
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {
                   ForEach ($version In $versions) {

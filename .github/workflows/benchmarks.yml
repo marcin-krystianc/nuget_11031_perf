@@ -163,7 +163,7 @@ jobs:
       - name: Benchmark
         shell: pwsh
         run: |
-          $solutions = @("TestSolutions/SanitisedNetCoreApp3.1Centralised")
+          $solutions = @("OrchardCore", "orleans", "TestSolutions/SanitisedNetCoreApp3.1Centralised")
           $versions = @("${{env.DEV_VERSION}}", "${{env.BRANCH_VERSION}}", "${{env.BASE_VERSION}}")
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {

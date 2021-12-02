@@ -9,7 +9,7 @@ env:
   ITERATION_COUNT: 10
   BASE_VERSION: rc.1.21458.32
   BASE_VERSION_WINDOWS: https://download.visualstudio.microsoft.com/download/pr/ca65b248-9750-4c2d-89e6-ef27073d5e95/05c682ca5498bfabc95985a4c72ac635/dotnet-sdk-6.0.100-win-x64.zip
-  BASE_VERSION_LINUX: https://download.visualstudio.microsoft.com/download/pr/62f78047-71de-460e-85ca-254f1fa848de/ecabeefdca2902f3f06819612cd9d45c/dotnet-sdk-6.0.100-osx-x64.tar.gz
+  BASE_VERSION_LINUX: https://download.visualstudio.microsoft.com/download/pr/17b6759f-1af0-41bc-ab12-209ba0377779/e8d02195dbf1434b940e0f05ae086453/dotnet-sdk-6.0.100-linux-x64.tar.gz
   DEV_VERSION: dev.838751441
   BRANCH_VERSION: nommap.56a10525b
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
@@ -40,7 +40,7 @@ jobs:
       - name: Benchmark
         shell: pwsh
         run: |
-          $solutions = @("TestSolutions/SanitisedNetCoreApp3.1Centralised", "TestSolutions/SanitisedNetCoreApp3.1CentralisedOptimized")
+          $solutions = @("orleans")
           $versions = @("${{env.DEV_VERSION}}")
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {
@@ -119,7 +119,7 @@ jobs:
       - name: Benchmark
         shell: pwsh
         run: |
-          $solutions = @("TestSolutions/SanitisedNetCoreApp3.1Centralised", "TestSolutions/SanitisedNetCoreApp3.1CentralisedOptimized")
+          $solutions = @("orleans")
           $versions = @("${{env.BRANCH_VERSION}}")
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {
@@ -193,7 +193,7 @@ jobs:
       - name: Benchmark
         shell: pwsh
         run: |
-          $solutions = @("TestSolutions/SanitisedNetCoreApp3.1Centralised", "TestSolutions/SanitisedNetCoreApp3.1CentralisedOptimized")
+          $solutions = @("orleans")
           $versions = @("${{env.BRANCH_VERSION}}")
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {

@@ -8,10 +8,10 @@ on:
 env:
   ITERATION_COUNT: 10
   BASE_VERSION: rc.1.21458.32
-  BASE_VERSION_WINDOWS: https://download.visualstudio.microsoft.com/download/pr/575db146-cef0-45f8-8517-c874d62deac7/c63b8d10cc85f237f1a56935d0e85895/dotnet-sdk-6.0.100-rc.1.21458.32-win-x64.zip
-  BASE_VERSION_LINUX: https://download.visualstudio.microsoft.com/download/pr/4880c5a4-9c22-47a7-b298-651f1294a385/795f7828d8684059705e625b33027f89/dotnet-sdk-6.0.100-rc.1.21458.32-linux-x64.tar.gz
+  BASE_VERSION_WINDOWS: https://download.visualstudio.microsoft.com/download/pr/ca65b248-9750-4c2d-89e6-ef27073d5e95/05c682ca5498bfabc95985a4c72ac635/dotnet-sdk-6.0.100-win-x64.zip
+  BASE_VERSION_LINUX: https://download.visualstudio.microsoft.com/download/pr/62f78047-71de-460e-85ca-254f1fa848de/ecabeefdca2902f3f06819612cd9d45c/dotnet-sdk-6.0.100-osx-x64.tar.gz
   DEV_VERSION: dev.838751441
-  BRANCH_VERSION: nommap.5a8b1c47a
+  BRANCH_VERSION: nommap.56a10525b
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
 
@@ -45,6 +45,21 @@ jobs:
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {
                   ForEach ($version In $versions) {
+
+                    $Env:NUGET_MMAP_PACKAGE_EXTRACTION = "0"
+                    $Env:NUGET_ASYNC_PACKAGE_EXTRACTION = "0"
+                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\$version\NuGet.CommandLine\bin\Release\net472\NuGet.exe  -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
+
+                    $Env:NUGET_MMAP_PACKAGE_EXTRACTION = "0"
+                    $Env:NUGET_ASYNC_PACKAGE_EXTRACTION = "1"
+                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\$version\NuGet.CommandLine\bin\Release\net472\NuGet.exe  -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
+
+                    $Env:NUGET_MMAP_PACKAGE_EXTRACTION = "1"
+                    $Env:NUGET_ASYNC_PACKAGE_EXTRACTION = "0"
+                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\$version\NuGet.CommandLine\bin\Release\net472\NuGet.exe  -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
+
+                    $Env:NUGET_MMAP_PACKAGE_EXTRACTION = "1"
+                    $Env:NUGET_ASYNC_PACKAGE_EXTRACTION = "1"
                     .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\$version\NuGet.CommandLine\bin\Release\net472\NuGet.exe  -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
                   }
               }
@@ -63,23 +78,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         
-      - name: Download .NET Core SDK 6.0.100-${{env.BASE_VERSION}}
+      - name: Download .NET Core SDK 6.0.100
         shell: pwsh
         run: |
           curl -sSL ${{env.BASE_VERSION_WINDOWS}} -o dotnet.zip
           Expand-Archive dotnet.zip -DestinationPath dotnet
           # Add(prepend) local dotnet to the system PATH
           echo "$env:GITHUB_WORKSPACE\dotnet" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-         
+
       - name: Prepare test SDKs
         shell: pwsh
         run: |
           $versions = @("${{env.DEV_VERSION}}", "${{env.BRANCH_VERSION}}")
           ForEach ($version In $versions) {
-              Copy-Item -Path .\dotnet\sdk\6.0.100-${{env.BASE_VERSION}} -Destination .\dotnet\sdk\6.0.100-$version -Recurse
+              Copy-Item -Path .\dotnet\sdk\6.0.100 -Destination .\dotnet\sdk\6.0.100-$version -Recurse
               Copy-Item -Path .\artifacts\$version\NuGet.Build.Tasks\bin\Release\netstandard2.0\* -Destination .\dotnet\sdk\6.0.100-$version
               $content = Get-Content -Path .\dotnet\sdk\6.0.100-$version\.version
-              $newcontent = $content -replace "6.0.100-${{env.BASE_VERSION}}", "6.0.100-$version"
+              $newcontent = $content -replace "6.0.100", "6.0.100-$version"
               Set-Content -Path .\dotnet\sdk\6.0.100-$version\.version -Value $newcontent
           }
 
@@ -105,12 +120,27 @@ jobs:
         shell: pwsh
         run: |
           $solutions = @("TestSolutions/SanitisedNetCoreApp3.1Centralised", "TestSolutions/SanitisedNetCoreApp3.1CentralisedOptimized")
-          $versions = @("${{env.BASE_VERSION}}")
+          $versions = @("${{env.BRANCH_VERSION}}")
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {
                   ForEach ($version In $versions) {
                     $sdk = '{"sdk": { "version": "6.0.100-' + $version + '" } }'
                     Set-Content -Path global.json -Value $sdk   
+
+                    $Env:NUGET_MMAP_PACKAGE_EXTRACTION = "0"
+                    $Env:NUGET_ASYNC_PACKAGE_EXTRACTION = "0"
+                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
+
+                    $Env:NUGET_MMAP_PACKAGE_EXTRACTION = "0"
+                    $Env:NUGET_ASYNC_PACKAGE_EXTRACTION = "1"
+                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
+
+                    $Env:NUGET_MMAP_PACKAGE_EXTRACTION = "1"
+                    $Env:NUGET_ASYNC_PACKAGE_EXTRACTION = "0"
+                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
+
+                    $Env:NUGET_MMAP_PACKAGE_EXTRACTION = "1"
+                    $Env:NUGET_ASYNC_PACKAGE_EXTRACTION = "1"
                     .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
                   }
               }
@@ -129,7 +159,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         
-      - name: Download .NET Core SDK 6.0.100-${{env.BASE_VERSION}}
+      - name: Download .NET Core SDK 6.0.100
         shell: pwsh
         run: |
           curl -sSL ${{env.BASE_VERSION_LINUX}} -o dotnet.tar.gz
@@ -141,12 +171,12 @@ jobs:
       - name: Prepare test SDKs
         shell: pwsh
         run: |
-          $versions = @("${{env.DEV_VERSION}}", "${{env.BRANCH_VERSION}}")
+          $versions = @("${{env.BRANCH_VERSION}}")
           ForEach ($version In $versions) {
-              Copy-Item -Path .\dotnet\sdk\6.0.100-${{env.BASE_VERSION}} -Destination .\dotnet\sdk\6.0.100-$version -Recurse
+              Copy-Item -Path .\dotnet\sdk\6.0.100 -Destination .\dotnet\sdk\6.0.100-$version -Recurse
               Copy-Item -Path .\artifacts\$version\NuGet.Build.Tasks\bin\Release\netstandard2.0\* -Destination .\dotnet\sdk\6.0.100-$version
               $content = Get-Content -Path .\dotnet\sdk\6.0.100-$version\.version
-              $newcontent = $content -replace "6.0.100-${{env.BASE_VERSION}}", "6.0.100-$version"
+              $newcontent = $content -replace "6.0.100", "6.0.100-$version"
               Set-Content -Path .\dotnet\sdk\6.0.100-$version\.version -Value $newcontent
           }
 
@@ -164,12 +194,27 @@ jobs:
         shell: pwsh
         run: |
           $solutions = @("TestSolutions/SanitisedNetCoreApp3.1Centralised", "TestSolutions/SanitisedNetCoreApp3.1CentralisedOptimized")
-          $versions = @("${{env.BASE_VERSION}}")
+          $versions = @("${{env.BRANCH_VERSION}}")
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {
                   ForEach ($version In $versions) {
                     $sdk = '{"sdk": { "version": "6.0.100-' + $version + '" } }'
                     Set-Content -Path global.json -Value $sdk
+
+                    $Env:NUGET_MMAP_PACKAGE_EXTRACTION = "0"
+                    $Env:NUGET_ASYNC_PACKAGE_EXTRACTION = "0"
+                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath dotnet/dotnet -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
+
+                    $Env:NUGET_MMAP_PACKAGE_EXTRACTION = "0"
+                    $Env:NUGET_ASYNC_PACKAGE_EXTRACTION = "1"
+                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath dotnet/dotnet -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
+
+                    $Env:NUGET_MMAP_PACKAGE_EXTRACTION = "1"
+                    $Env:NUGET_ASYNC_PACKAGE_EXTRACTION = "0"
+                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath dotnet/dotnet -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
+
+                    $Env:NUGET_MMAP_PACKAGE_EXTRACTION = "1"
+                    $Env:NUGET_ASYNC_PACKAGE_EXTRACTION = "1"
                     .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath dotnet/dotnet -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
                   }
               }

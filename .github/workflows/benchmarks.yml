@@ -11,7 +11,7 @@ env:
   BASE_VERSION_WINDOWS: https://download.visualstudio.microsoft.com/download/pr/ca65b248-9750-4c2d-89e6-ef27073d5e95/05c682ca5498bfabc95985a4c72ac635/dotnet-sdk-6.0.100-win-x64.zip
   BASE_VERSION_LINUX: https://download.visualstudio.microsoft.com/download/pr/17b6759f-1af0-41bc-ab12-209ba0377779/e8d02195dbf1434b940e0f05ae086453/dotnet-sdk-6.0.100-linux-x64.tar.gz
   DEV_VERSION: dev.838751441
-  BRANCH_VERSION: nommap.c924d0290
+  BRANCH_VERSION: nommap.251e3e685
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
 

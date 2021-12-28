@@ -126,22 +126,14 @@ jobs:
                   ForEach ($version In $versions) {
                     $sdk = '{"sdk": { "version": "6.0.100-' + $version + '" } }'
                     Set-Content -Path global.json -Value $sdk   
-
-                    $Env:NUGET_MMAP_PACKAGE_EXTRACTION = "0"
-                    $Env:NUGET_ASYNC_PACKAGE_EXTRACTION = "0"
-                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
-
-                    $Env:NUGET_MMAP_PACKAGE_EXTRACTION = "0"
-                    $Env:NUGET_ASYNC_PACKAGE_EXTRACTION = "1"
-                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
-
-                    $Env:NUGET_MMAP_PACKAGE_EXTRACTION = "1"
-                    $Env:NUGET_ASYNC_PACKAGE_EXTRACTION = "0"
-                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
-
-                    $Env:NUGET_MMAP_PACKAGE_EXTRACTION = "1"
-                    $Env:NUGET_ASYNC_PACKAGE_EXTRACTION = "1"
-                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
+                    
+                    For ($j=0; $j -lt 2; $j++) {
+                        For ($k=0; $k -lt 2; $k++) {
+                            $Env:NUGET_MMAP_PACKAGE_EXTRACTION = "$j"
+                            $Env:NUGET_ASYNC_PACKAGE_EXTRACTION = "$k"
+                            .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore -resultsFilePath results_$Env:NUGET_MMAP_PACKAGE_EXTRACTION_$Env:NUGET_ASYNC_PACKAGE_EXTRACTION.csv
+                        }
+                    }
                   }
               }
           }
@@ -150,7 +142,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: results_windows_dotnet
-          path: results.csv
+          path: results_0_0.csv
 
   benchmark_dotnet_linux:
     runs-on: ubuntu-latest

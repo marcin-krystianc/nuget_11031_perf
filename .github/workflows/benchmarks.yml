@@ -131,7 +131,7 @@ jobs:
                         For ($k=0; $k -lt 2; $k++) {
                             $Env:NUGET_MMAP_PACKAGE_EXTRACTION = "$j"
                             $Env:NUGET_ASYNC_PACKAGE_EXTRACTION = "$k"
-                            .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore -resultsFilePath results_$Env:NUGET_MMAP_PACKAGE_EXTRACTION_$Env:NUGET_ASYNC_PACKAGE_EXTRACTION.csv
+                            .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath $solution -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore -resultsFilePath results_$Env:NUGET_MMAP_PACKAGE_EXTRACTION_$Env:NUGET_ASYNC_PACKAGE_EXTRACTION.csv
                         }
                     }
                   }

@@ -7,7 +7,6 @@ on:
 
 env:
   ITERATION_COUNT: 2
-  BASE_VERSION: rc.1.21458.32
   BASE_VERSION_WINDOWS: https://download.visualstudio.microsoft.com/download/pr/ca65b248-9750-4c2d-89e6-ef27073d5e95/05c682ca5498bfabc95985a4c72ac635/dotnet-sdk-6.0.100-win-x64.zip
   BASE_VERSION_LINUX: https://download.visualstudio.microsoft.com/download/pr/17b6759f-1af0-41bc-ab12-209ba0377779/e8d02195dbf1434b940e0f05ae086453/dotnet-sdk-6.0.100-linux-x64.tar.gz
   DEV_VERSION: dev.838751441
@@ -142,7 +141,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: results_windows_dotnet
-          path: results_0_0.csv
+          path: results_*.csv
 
   benchmark_dotnet_linux:
     runs-on: ubuntu-latest

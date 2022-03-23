@@ -381,7 +381,7 @@ Function RunRestore(
 
         If ($isClientDotnetExe)
         {
-            . $nugetClientFilePath nuget locals -c $localsArguments *>>$null
+            . $nugetClientFilePath nuget locals -c $localsArguments *
         }
         ElseIf($isClientMSBuild)
         {

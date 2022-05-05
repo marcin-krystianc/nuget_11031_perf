@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>NuGet.CommandLine</id>
+    <version>6.3.0-zlocal.32767</version>
+    <authors>Microsoft</authors>
+    <developmentDependency>true</developmentDependency>
+    <license type="expression">Apache-2.0</license>
+    <licenseUrl>https://licenses.nuget.org/Apache-2.0</licenseUrl>
+    <icon>icon.png</icon>
+    <readme>README.md</readme>
+    <projectUrl>https://aka.ms/nugetprj</projectUrl>
+    <description>NuGet Command Line Interface.</description>
+    <copyright>© Microsoft Corporation. All rights reserved.</copyright>
+    <tags>nuget</tags>
+    <repository type="git" url="https://github.com/NuGet/NuGet.Client" commit="2d93510efe2537fb26b3d1057a05e0cc9a6f07c5" />
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="Microsoft.Build.Utilities.v4.0" targetFramework=".NETFramework4.7.2" />
+      <frameworkAssembly assemblyName="Microsoft.CSharp" targetFramework=".NETFramework4.7.2" />
+      <frameworkAssembly assemblyName="System.ComponentModel.Composition" targetFramework=".NETFramework4.7.2" />
+      <frameworkAssembly assemblyName="System.ComponentModel.Composition.Registration" targetFramework=".NETFramework4.7.2" />
+      <frameworkAssembly assemblyName="System.ComponentModel.DataAnnotations" targetFramework=".NETFramework4.7.2" />
+      <frameworkAssembly assemblyName="System" targetFramework=".NETFramework4.7.2" />
+      <frameworkAssembly assemblyName="System.IO.Compression" targetFramework=".NETFramework4.7.2" />
+      <frameworkAssembly assemblyName="System.Net.Http" targetFramework=".NETFramework4.7.2" />
+      <frameworkAssembly assemblyName="System.Xml" targetFramework=".NETFramework4.7.2" />
+      <frameworkAssembly assemblyName="System.Xml.Linq" targetFramework=".NETFramework4.7.2" />
+    </frameworkAssemblies>
+  </metadata>
+  <files>
+    <file src="D:\workspace\NuGet.Client\artifacts\VS15\NuGet.exe" target="tools\NuGet.exe" />
+    <file src="D:\workspace\NuGet.Client\artifacts\VS15\NuGet.pdb" target="tools\NuGet.pdb" />
+    <file src="D:\workspace\NuGet.Client\icon.png" target="\icon.png" />
+    <file src="D:\workspace\NuGet.Client\src\NuGet.Clients\NuGet.CommandLine\README.md" target="\README.md" />
+  </files>
+</package>

@@ -7,11 +7,11 @@ on:
 
 env:
   ITERATION_COUNT: 5
-  BASE_VERSION: rc.1.21458.32
-  BASE_VERSION_WINDOWS: https://download.visualstudio.microsoft.com/download/pr/575db146-cef0-45f8-8517-c874d62deac7/c63b8d10cc85f237f1a56935d0e85895/dotnet-sdk-6.0.100-rc.1.21458.32-win-x64.zip
-  BASE_VERSION_LINUX: https://download.visualstudio.microsoft.com/download/pr/4880c5a4-9c22-47a7-b298-651f1294a385/795f7828d8684059705e625b33027f89/dotnet-sdk-6.0.100-rc.1.21458.32-linux-x64.tar.gz
-  DEV_VERSION: dev.838751441
-  BRANCH_VERSION: nommap.5a8b1c47a
+  BASE_VERSION: 6.0.202
+  BASE_VERSION_WINDOWS: https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-6.0.202-windows-x64-binaries
+  BASE_VERSION_LINUX: https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-6.0.202-linux-x64-binaries
+  DEV_VERSION: dev.2d93510ef                    
+  BRANCH_VERSION: walker.854c04d6f                          
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
 
@@ -63,7 +63,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         
-      - name: Download .NET Core SDK 6.0.100-${{env.BASE_VERSION}}
+      - name: Download .NET Core SDK ${{env.BASE_VERSION}}
         shell: pwsh
         run: |
           curl -sSL ${{env.BASE_VERSION_WINDOWS}} -o dotnet.zip
@@ -76,11 +76,11 @@ jobs:
         run: |
           $versions = @("${{env.DEV_VERSION}}", "${{env.BRANCH_VERSION}}")
           ForEach ($version In $versions) {
-              Copy-Item -Path .\dotnet\sdk\6.0.100-${{env.BASE_VERSION}} -Destination .\dotnet\sdk\6.0.100-$version -Recurse
-              Copy-Item -Path .\artifacts\$version\NuGet.Build.Tasks\bin\Release\netstandard2.0\* -Destination .\dotnet\sdk\6.0.100-$version
-              $content = Get-Content -Path .\dotnet\sdk\6.0.100-$version\.version
-              $newcontent = $content -replace "6.0.100-${{env.BASE_VERSION}}", "6.0.100-$version"
-              Set-Content -Path .\dotnet\sdk\6.0.100-$version\.version -Value $newcontent
+              Copy-Item -Path .\dotnet\sdk\${{env.BASE_VERSION}} -Destination .\dotnet\sdk\${{env.BASE_VERSION}}-$version -Recurse
+              Copy-Item -Path .\artifacts\$version\NuGet.Build.Tasks.Console\bin\Release\netcoreapp5.0\* -Destination .\dotnet\sdk\${{env.BASE_VERSION}}-$version
+              $content = Get-Content -Path .\dotnet\sdk\${{env.BASE_VERSION}}-$version\.version
+              $newcontent = $content -replace "${{env.BASE_VERSION}}", "${{env.BASE_VERSION}}-$version"
+              Set-Content -Path .\dotnet\sdk\${{env.BASE_VERSION}}-$version\.version -Value $newcontent
           }
 
       - name: Checkout test solutions
@@ -109,7 +109,7 @@ jobs:
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {
                   ForEach ($version In $versions) {
-                    $sdk = '{"sdk": { "version": "6.0.100-' + $version + '" } }'
+                    $sdk = '{"sdk": { "version": "${{env.BASE_VERSION}}' + $version + '" } }'
                     Set-Content -Path global.json -Value $sdk   
                     .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
                   }
@@ -129,7 +129,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         
-      - name: Download .NET Core SDK 6.0.100-${{env.BASE_VERSION}}
+      - name: Download .NET Core SDK ${{env.BASE_VERSION}}
         shell: pwsh
         run: |
           curl -sSL ${{env.BASE_VERSION_LINUX}} -o dotnet.tar.gz
@@ -143,11 +143,11 @@ jobs:
         run: |
           $versions = @("${{env.DEV_VERSION}}", "${{env.BRANCH_VERSION}}")
           ForEach ($version In $versions) {
-              Copy-Item -Path .\dotnet\sdk\6.0.100-${{env.BASE_VERSION}} -Destination .\dotnet\sdk\6.0.100-$version -Recurse
-              Copy-Item -Path .\artifacts\$version\NuGet.Build.Tasks\bin\Release\netstandard2.0\* -Destination .\dotnet\sdk\6.0.100-$version
-              $content = Get-Content -Path .\dotnet\sdk\6.0.100-$version\.version
-              $newcontent = $content -replace "6.0.100-${{env.BASE_VERSION}}", "6.0.100-$version"
-              Set-Content -Path .\dotnet\sdk\6.0.100-$version\.version -Value $newcontent
+              Copy-Item -Path .\dotnet\sdk\${{env.BASE_VERSION}} -Destination .\dotnet\sdk\${{env.BASE_VERSION}}-$version -Recurse
+              Copy-Item -Path .\artifacts\$version\NuGet.Build.Tasks.Console\bin\Release\netcoreapp5.0\* -Destination .\dotnet\sdk\${{env.BASE_VERSION}}-$version
+              $content = Get-Content -Path .\dotnet\sdk\${{env.BASE_VERSION}}-$version\.version
+              $newcontent = $content -replace "${{env.BASE_VERSION}}", "${{env.BASE_VERSION}}-$version"
+              Set-Content -Path .\dotnet\sdk\${{env.BASE_VERSION}}-$version\.version -Value $newcontent
           }
 
       - name: Checkout test solutions
@@ -168,7 +168,7 @@ jobs:
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {
                   ForEach ($version In $versions) {
-                    $sdk = '{"sdk": { "version": "6.0.100-' + $version + '" } }'
+                    $sdk = '{"sdk": { "version": "${{env.BASE_VERSION}}' + $version + '" } }'
                     Set-Content -Path global.json -Value $sdk
                     .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath dotnet/dotnet -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
                   }

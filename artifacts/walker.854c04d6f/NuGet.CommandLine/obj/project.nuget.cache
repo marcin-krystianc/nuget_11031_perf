@@ -1,0 +1,31 @@
+{
+  "version": 2,
+  "dgSpecHash": "HtY5+/ilS24AaweiS35fIziOALf9WNQs9GCdwnJZWzUlCG9Boea+B5H+FxqPSjAExjFKn9hXOf00x3HokwP57Q==",
+  "success": true,
+  "projectFilePath": "D:\\workspace\\NuGet.Client\\src\\NuGet.Clients\\NuGet.CommandLine\\NuGet.CommandLine.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\marcink\\.nuget\\packages\\microsoft.build.tasks.git\\1.0.0\\microsoft.build.tasks.git.1.0.0.nupkg.sha512",
+    "C:\\Users\\marcink\\.nuget\\packages\\microsoft.codeanalysis.bannedapianalyzers\\3.3.2\\microsoft.codeanalysis.bannedapianalyzers.3.3.2.nupkg.sha512",
+    "C:\\Users\\marcink\\.nuget\\packages\\microsoft.codeanalysis.fxcopanalyzers\\2.9.8\\microsoft.codeanalysis.fxcopanalyzers.2.9.8.nupkg.sha512",
+    "C:\\Users\\marcink\\.nuget\\packages\\microsoft.codeanalysis.versioncheckanalyzer\\2.9.8\\microsoft.codeanalysis.versioncheckanalyzer.2.9.8.nupkg.sha512",
+    "C:\\Users\\marcink\\.nuget\\packages\\microsoft.codequality.analyzers\\2.9.8\\microsoft.codequality.analyzers.2.9.8.nupkg.sha512",
+    "C:\\Users\\marcink\\.nuget\\packages\\microsoft.csharp\\4.3.0\\microsoft.csharp.4.3.0.nupkg.sha512",
+    "C:\\Users\\marcink\\.nuget\\packages\\microsoft.extensions.fileproviders.abstractions\\5.0.0\\microsoft.extensions.fileproviders.abstractions.5.0.0.nupkg.sha512",
+    "C:\\Users\\marcink\\.nuget\\packages\\microsoft.extensions.filesystemglobbing\\5.0.0\\microsoft.extensions.filesystemglobbing.5.0.0.nupkg.sha512",
+    "C:\\Users\\marcink\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.0\\microsoft.extensions.primitives.5.0.0.nupkg.sha512",
+    "C:\\Users\\marcink\\.nuget\\packages\\microsoft.netcore.analyzers\\2.9.8\\microsoft.netcore.analyzers.2.9.8.nupkg.sha512",
+    "C:\\Users\\marcink\\.nuget\\packages\\microsoft.netframework.analyzers\\2.9.8\\microsoft.netframework.analyzers.2.9.8.nupkg.sha512",
+    "C:\\Users\\marcink\\.nuget\\packages\\microsoft.sourcelink.common\\1.0.0\\microsoft.sourcelink.common.1.0.0.nupkg.sha512",
+    "C:\\Users\\marcink\\.nuget\\packages\\microsoft.sourcelink.github\\1.0.0\\microsoft.sourcelink.github.1.0.0.nupkg.sha512",
+    "C:\\Users\\marcink\\.nuget\\packages\\microsoft.visualstudio.setup.configuration.interop\\1.16.30\\microsoft.visualstudio.setup.configuration.interop.1.16.30.nupkg.sha512",
+    "C:\\Users\\marcink\\.nuget\\packages\\microsoft.web.xdt\\3.0.0\\microsoft.web.xdt.3.0.0.nupkg.sha512",
+    "C:\\Users\\marcink\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
+    "C:\\Users\\marcink\\.nuget\\packages\\system.buffers\\4.5.1\\system.buffers.4.5.1.nupkg.sha512",
+    "C:\\Users\\marcink\\.nuget\\packages\\system.memory\\4.5.4\\system.memory.4.5.4.nupkg.sha512",
+    "C:\\Users\\marcink\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512",
+    "C:\\Users\\marcink\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\5.0.0\\system.runtime.compilerservices.unsafe.5.0.0.nupkg.sha512",
+    "C:\\Users\\marcink\\.nuget\\packages\\system.threading.tasks.dataflow\\4.9.0\\system.threading.tasks.dataflow.4.9.0.nupkg.sha512",
+    "C:\\Users\\marcink\\.nuget\\packages\\nuget.core\\2.14.0-rtm-832\\nuget.core.2.14.0-rtm-832.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -81,6 +81,7 @@ jobs:
               $content = Get-Content -Path .\dotnet\sdk\${{env.BASE_VERSION}}-$version\.version
               $newcontent = $content -replace "${{env.BASE_VERSION}}", "${{env.BASE_VERSION}}-$version"
               Set-Content -Path .\dotnet\sdk\${{env.BASE_VERSION}}-$version\.version -Value $newcontent
+              Get-Content -Path .\dotnet\sdk\${{env.BASE_VERSION}}-$version\.version
           }
           Get-ChildItem .
           Get-ChildItem .\dotnet\sdk\
@@ -107,11 +108,11 @@ jobs:
         shell: pwsh
         run: |
           $solutions = @("NuGet.Client", "OrchardCore", "orleans", "TestSolutions/SanitisedNetCoreApp3.1Centralised")
-          $versions = @("${{env.DEV_VERSION}}", "${{env.BRANCH_VERSION}}", "${{env.BASE_VERSION}}")
+          $versions = @("${{env.BASE_VERSION}}-${{env.DEV_VERSION}}", "${{env.BASE_VERSION}}-${{env.BRANCH_VERSION}}", "${{env.BASE_VERSION}}")
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {
                   ForEach ($version In $versions) {
-                    $sdk = '{"sdk": { "version": "${{env.BASE_VERSION}}' + "-" + $version + '" } }'
+                    $sdk = '{"sdk": { "version": "' $version + '" } }'
                     Set-Content -Path global.json -Value $sdk   
                     Get-Content -Path global.json
                     .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore

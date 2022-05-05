@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  ITERATION_COUNT: 5
+  ITERATION_COUNT: 1
   BASE_VERSION: 6.0.202
   BASE_VERSION_WINDOWS: https://download.visualstudio.microsoft.com/download/pr/b1461027-6daa-467d-aebe-6326343e5840/01656d95b28f16c53cd947a8072d004b/dotnet-sdk-6.0.202-win-x64.zip
   BASE_VERSION_LINUX: https://download.visualstudio.microsoft.com/download/pr/9d8c7137-2091-4fc6-a419-60ba59c8b9de/db0c5cda94f31d2260d369123de32d59/dotnet-sdk-6.0.202-linux-x64.tar.gz
@@ -82,6 +82,8 @@ jobs:
               $newcontent = $content -replace "${{env.BASE_VERSION}}", "${{env.BASE_VERSION}}-$version"
               Set-Content -Path .\dotnet\sdk\${{env.BASE_VERSION}}-$version\.version -Value $newcontent
           }
+          Get-ChildItem .
+          Get-ChildItem \dotnet\sdk\
 
       - name: Checkout test solutions
         shell: pwsh

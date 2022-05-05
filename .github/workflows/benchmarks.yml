@@ -83,7 +83,7 @@ jobs:
               Set-Content -Path .\dotnet\sdk\${{env.BASE_VERSION}}-$version\.version -Value $newcontent
           }
           Get-ChildItem .
-          Get-ChildItem \dotnet\sdk\
+          Get-ChildItem .\dotnet\sdk\
 
       - name: Checkout test solutions
         shell: pwsh
@@ -151,6 +151,8 @@ jobs:
               $newcontent = $content -replace "${{env.BASE_VERSION}}", "${{env.BASE_VERSION}}-$version"
               Set-Content -Path .\dotnet\sdk\${{env.BASE_VERSION}}-$version\.version -Value $newcontent
           }
+          Get-ChildItem .
+          Get-ChildItem .\dotnet\sdk\
 
       - name: Checkout test solutions
         shell: pwsh

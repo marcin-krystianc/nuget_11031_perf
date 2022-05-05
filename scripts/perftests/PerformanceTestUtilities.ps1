@@ -156,11 +156,11 @@ Function LocalsClearAll([string] $nugetClientFilePath)
     $nugetClientFilePath = GetAbsolutePath $nugetClientFilePath
     If ($(IsClientDotnetExe $nugetClientFilePath))
     {
-        . $nugetClientFilePath nuget locals -c all *>>$null
+        . $nugetClientFilePath nuget locals -c all *>> $null
     }
     Elseif($(IsClientMSBuildExe $nugetClientFilePath))
     {
-        . dotnet.exe nuget locals -c all *>>$null
+        . dotnet.exe nuget locals -c all *>> $null
     }
     Else
     {

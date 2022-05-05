@@ -40,7 +40,7 @@ jobs:
       - name: Setup .NET Core SDK ${{env.BASE_VERSION}}
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: ${{env.BRANCH_VERSION}}
+          dotnet-version: 6.0.202
           
       - name: Benchmark
         shell: pwsh
@@ -112,7 +112,8 @@ jobs:
       - name: Benchmark
         shell: pwsh
         run: |
-          $solutions = @("NuGet.Client", "OrchardCore", "orleans", "TestSolutions/SanitisedNetCoreApp3.1Centralised")
+          // $solutions = @("NuGet.Client", "OrchardCore", "orleans", "TestSolutions/SanitisedNetCoreApp3.1Centralised")
+          $solutions = @("TestSolutions/SanitisedNetCoreApp3.1Centralised")
           $versions = @("${{env.BASE_VERSION}}-${{env.DEV_VERSION}}", "${{env.BASE_VERSION}}-${{env.BRANCH_VERSION}}", "${{env.BASE_VERSION}}")
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {
@@ -120,7 +121,7 @@ jobs:
                     $sdk = '{"sdk": { "version": "' + $version + '" } }'
                     Set-Content -Path global.json -Value $sdk   
                     Get-Content -Path global.json
-                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
+                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath $solution -resultsFilePath results.csv -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
                   }
               }
           }
@@ -174,7 +175,8 @@ jobs:
       - name: Benchmark
         shell: pwsh
         run: |
-          $solutions = @("OrchardCore", "orleans", "TestSolutions/SanitisedNetCoreApp3.1Centralised")
+          //$solutions = @("OrchardCore", "orleans", "TestSolutions/SanitisedNetCoreApp3.1Centralised")
+          $solutions = @("TestSolutions/SanitisedNetCoreApp3.1Centralised")
           $versions = @("${{env.BASE_VERSION}}-${{env.DEV_VERSION}}", "${{env.BASE_VERSION}}-${{env.BRANCH_VERSION}}", "${{env.BASE_VERSION}}")
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {

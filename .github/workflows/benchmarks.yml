@@ -111,7 +111,7 @@ jobs:
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {
                   ForEach ($version In $versions) {
-                    $sdk = '{"sdk": { "version": "${{env.BASE_VERSION}}' + $version + '" } }'
+                    $sdk = '{"sdk": { "version": "${{env.BASE_VERSION}}' + "-" + $version + '" } }'
                     Set-Content -Path global.json -Value $sdk   
                     Get-Content -Path global.json
                     .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
@@ -173,8 +173,9 @@ jobs:
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {
                   ForEach ($version In $versions) {
-                    $sdk = '{"sdk": { "version": "${{env.BASE_VERSION}}' + $version + '" } }'
+                    $sdk = '{"sdk": { "version": "${{env.BASE_VERSION}}' + "-" + $version + '" } }'
                     Set-Content -Path global.json -Value $sdk
+                    Get-Content -Path global.json
                     .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath dotnet/dotnet -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
                   }
               }

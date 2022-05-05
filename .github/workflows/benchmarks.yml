@@ -36,7 +36,12 @@ jobs:
           reg ADD "HKLM\Software\Microsoft\StrongName\Verification\*,*" /f
           reg DELETE "HKLM\Software\Wow6432Node\Microsoft\StrongName\Verification" /f
           reg ADD "HKLM\Software\Wow6432Node\Microsoft\StrongName\Verification\*,*" /f
-
+      
+      - name: Setup .NET Core SDK ${{env.BASE_VERSION}}
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{env.BRANCH_VERSION}}
+          
       - name: Benchmark
         shell: pwsh
         run: |
@@ -170,11 +175,11 @@ jobs:
         shell: pwsh
         run: |
           $solutions = @("OrchardCore", "orleans", "TestSolutions/SanitisedNetCoreApp3.1Centralised")
-          $versions = @("${{env.DEV_VERSION}}", "${{env.BRANCH_VERSION}}", "${{env.BASE_VERSION}}")
+          $versions = @("${{env.BASE_VERSION}}-${{env.DEV_VERSION}}", "${{env.BASE_VERSION}}-${{env.BRANCH_VERSION}}", "${{env.BASE_VERSION}}")
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {
                   ForEach ($version In $versions) {
-                    $sdk = '{"sdk": { "version": "${{env.BASE_VERSION}}' + "-" + $version + '" } }'
+                    $sdk = '{"sdk": { "version": "' + $version + '" } }'
                     Set-Content -Path global.json -Value $sdk
                     Get-Content -Path global.json
                     .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath dotnet/dotnet -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore

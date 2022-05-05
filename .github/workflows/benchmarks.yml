@@ -112,7 +112,7 @@ jobs:
       - name: Benchmark
         shell: pwsh
         run: |
-          // $solutions = @("NuGet.Client", "OrchardCore", "orleans", "TestSolutions/SanitisedNetCoreApp3.1Centralised")
+          # $solutions = @("NuGet.Client", "OrchardCore", "orleans", "TestSolutions/SanitisedNetCoreApp3.1Centralised")
           $solutions = @("TestSolutions/SanitisedNetCoreApp3.1Centralised")
           $versions = @("${{env.BASE_VERSION}}-${{env.DEV_VERSION}}", "${{env.BASE_VERSION}}-${{env.BRANCH_VERSION}}", "${{env.BASE_VERSION}}")
           For ($i=0; $i -lt 2; $i++) {
@@ -175,7 +175,7 @@ jobs:
       - name: Benchmark
         shell: pwsh
         run: |
-          //$solutions = @("OrchardCore", "orleans", "TestSolutions/SanitisedNetCoreApp3.1Centralised")
+          # $solutions = @("OrchardCore", "orleans", "TestSolutions/SanitisedNetCoreApp3.1Centralised")
           $solutions = @("TestSolutions/SanitisedNetCoreApp3.1Centralised")
           $versions = @("${{env.BASE_VERSION}}-${{env.DEV_VERSION}}", "${{env.BASE_VERSION}}-${{env.BRANCH_VERSION}}", "${{env.BASE_VERSION}}")
           For ($i=0; $i -lt 2; $i++) {

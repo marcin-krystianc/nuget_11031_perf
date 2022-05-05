@@ -381,11 +381,11 @@ Function RunRestore(
 
         If ($isClientDotnetExe)
         {
-            . $nugetClientFilePath nuget locals -c $localsArguments *
+            . $nugetClientFilePath nuget locals -c $localsArguments
         }
         ElseIf($isClientMSBuild)
         {
-            . dotnet.exe nuget locals -c $localsArguments *>>$null
+            . dotnet.exe nuget locals -c $localsArguments >>$null
         }
         Else
         {

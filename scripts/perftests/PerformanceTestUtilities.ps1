@@ -343,8 +343,6 @@ Function RunRestore(
 {
     $isClientDotnetExe = IsClientDotnetExe $nugetClientFilePath
     $isClientMSBuild = IsClientMSBuildExe $nugetClientFilePath
-
-    Log "solutionName:$solutionName" "yellow"
 			
     If ($isClientDotnetExe -And $isPackagesConfig)
     {

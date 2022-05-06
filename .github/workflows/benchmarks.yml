@@ -23,7 +23,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Checkout test solutions ${GITHUB_RUN_ID}
+      - name: Checkout test solutions ${{ github.run_id }}
         run: |
           git clone --recursive https://github.com/dotnet/orleans
           git clone --recursive https://github.com/OrchardCMS/OrchardCore.git

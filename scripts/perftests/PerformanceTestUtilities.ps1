@@ -344,6 +344,8 @@ Function RunRestore(
     $isClientDotnetExe = IsClientDotnetExe $nugetClientFilePath
     $isClientMSBuild = IsClientMSBuildExe $nugetClientFilePath
 
+    Log "solutionName:$solutionName" "yellow"
+			
     If ($isClientDotnetExe -And $isPackagesConfig)
     {
         Log "dotnet.exe does not support packages.config restore." "Red"

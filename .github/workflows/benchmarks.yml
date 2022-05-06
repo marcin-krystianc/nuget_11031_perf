@@ -23,7 +23,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Checkout test solutions
+      - name: Checkout test solutions ${{env.GITHUB_RUN_ID}}
         run: |
           git clone --recursive https://github.com/dotnet/orleans
           git clone --recursive https://github.com/OrchardCMS/OrchardCore.git
@@ -45,7 +45,7 @@ jobs:
       - name: Benchmark
         shell: pwsh
         run: |
-          # $solutions = @("NuGet.Client", "OrchardCore", "orleans", "TestSolutions/SanitisedNetCoreApp3.1Centralised")
+          # $solutions = @("NuGet.Client", "OrchardCore", "orleans", "TestSolutions/SanitisedNetCoreApp3.1Centralised", "TestSolutions/SanitisedNetCoreApp3.1")
           $solutions = @("TestSolutions/SanitisedNetCoreApp3.1Centralised")
           $versions = @("${{env.DEV_VERSION}}", "${{env.BRANCH_VERSION}}")
           For ($i=0; $i -lt 2; $i++) {
@@ -114,7 +114,7 @@ jobs:
         shell: pwsh
         run: |
           $nugetFoldersPath = [System.IO.Path]::GetFullPath(".nuget")
-          $solutions = @("orleans", "NuGet.Client", "OrchardCore", "TestSolutions/SanitisedNetCoreApp3.1Centralised")
+          $solutions = @("orleans", "NuGet.Client", "OrchardCore", "TestSolutions/SanitisedNetCoreApp3.1Centralised", "TestSolutions/SanitisedNetCoreApp3.1")
           # $solutions = @("TestSolutions/SanitisedNetCoreApp3.1Centralised")
           $versions = @("${{env.BASE_VERSION}}-${{env.DEV_VERSION}}", "${{env.BASE_VERSION}}-${{env.BRANCH_VERSION}}", "${{env.BASE_VERSION}}")
           For ($i=0; $i -lt 2; $i++) {
@@ -177,7 +177,7 @@ jobs:
       - name: Benchmark
         shell: pwsh
         run: |
-          $solutions = @("orleans", "OrchardCore", "TestSolutions/SanitisedNetCoreApp3.1Centralised")
+          $solutions = @("orleans", "OrchardCore", "TestSolutions/SanitisedNetCoreApp3.1Centralised", "TestSolutions/SanitisedNetCoreApp3.1")
           # $solutions = @("TestSolutions/SanitisedNetCoreApp3.1Centralised")
           $versions = @("${{env.BASE_VERSION}}-${{env.DEV_VERSION}}", "${{env.BASE_VERSION}}-${{env.BRANCH_VERSION}}", "${{env.BASE_VERSION}}")
           For ($i=0; $i -lt 2; $i++) {
@@ -186,7 +186,7 @@ jobs:
                     $sdk = '{"sdk": { "version": "' + $version + '" } }'
                     Set-Content -Path global.json -Value $sdk
                     Get-Content -Path global.json
-                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath dotnet/dotnet -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
+                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath dotnet/dotnet -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore -nugetFoldersPath $nugetFoldersPath  
                   }
               }
           }

@@ -23,7 +23,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Checkout test solutions ${{ github.run_id }}
+      - name: Checkout test solutions
         run: |
           git clone --recursive https://github.com/dotnet/orleans
           git clone --recursive https://github.com/OrchardCMS/OrchardCore.git
@@ -59,7 +59,7 @@ jobs:
       - name: Upload test results
         uses: actions/upload-artifact@v2
         with:
-          name: results_windows_nuget
+          name: results_windows_nuget_${{github.run_id}}
           path: results.csv
 
   benchmark_dotnet_windows:
@@ -131,7 +131,7 @@ jobs:
       - name: Upload test results
         uses: actions/upload-artifact@v2
         with:
-          name: results_windows_dotnet
+          name: results_windows_dotnet_${{github.run_id}}
           path: results.csv
 
   benchmark_dotnet_linux:
@@ -194,5 +194,5 @@ jobs:
       - name: Upload test results
         uses: actions/upload-artifact@v2
         with:
-          name: results_linux_dotnet
+          name: results_linux_dotnet_${{github.run_id}}
           path: results.csv

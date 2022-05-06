@@ -113,6 +113,7 @@ jobs:
       - name: Benchmark
         shell: pwsh
         run: |
+          $nugetFoldersPath = [System.IO.Path]::GetFullPath(".nuget")
           $solutions = @("orleans", "NuGet.Client", "OrchardCore", "TestSolutions/SanitisedNetCoreApp3.1Centralised")
           # $solutions = @("TestSolutions/SanitisedNetCoreApp3.1Centralised")
           $versions = @("${{env.BASE_VERSION}}-${{env.DEV_VERSION}}", "${{env.BASE_VERSION}}-${{env.BRANCH_VERSION}}", "${{env.BASE_VERSION}}")
@@ -122,7 +123,7 @@ jobs:
                     $sdk = '{"sdk": { "version": "' + $version + '" } }'
                     Set-Content -Path global.json -Value $sdk   
                     Get-Content -Path global.json
-                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath $solution -resultsFilePath results.csv -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore -nugetFoldersPath $[System.IO.Path]::GetFullPath(".nuget")
+                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath $solution -resultsFilePath results.csv -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore -nugetFoldersPath $nugetFoldersPath  
                   }
               }
           }

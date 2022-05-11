@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  ITERATION_COUNT: 5
+  ITERATION_COUNT: 1
   BASE_VERSION: 6.0.202
   BASE_VERSION_WINDOWS: https://download.visualstudio.microsoft.com/download/pr/b1461027-6daa-467d-aebe-6326343e5840/01656d95b28f16c53cd947a8072d004b/dotnet-sdk-6.0.202-win-x64.zip
   BASE_VERSION_LINUX: https://download.visualstudio.microsoft.com/download/pr/9d8c7137-2091-4fc6-a419-60ba59c8b9de/db0c5cda94f31d2260d369123de32d59/dotnet-sdk-6.0.202-linux-x64.tar.gz
@@ -53,7 +53,7 @@ jobs:
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {
                   ForEach ($version In $versions) {
-                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\$version\NuGet.CommandLine\bin\Release\net472\NuGet.exe  -solutionFilePath $solution -resultsFilePath results.csv -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore -nugetFoldersPath $nugetFoldersPath 
+                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\$version\NuGet.CommandLine\bin\Release\net472\NuGet.exe  -solutionFilePath $solution -resultsFilePath results_windows_nuget_${{github.run_id}}_${{env.RESTORE_USE_LEGACY_ALGORITHM}}.csv -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore -nugetFoldersPath $nugetFoldersPath 
                   }
               }
           }
@@ -62,7 +62,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: results_windows_nuget_${{github.run_id}}_${{env.RESTORE_USE_LEGACY_ALGORITHM}}
-          path: results.csv
+          path: results_windows_nuget_${{github.run_id}}_${{env.RESTORE_USE_LEGACY_ALGORITHM}}.csv
 
   benchmark_dotnet_windows:
     runs-on: windows-latest
@@ -125,7 +125,7 @@ jobs:
                     $sdk = '{"sdk": { "version": "' + $version + '" } }'
                     Set-Content -Path global.json -Value $sdk   
                     Get-Content -Path global.json
-                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath $solution -resultsFilePath results.csv -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore -nugetFoldersPath $nugetFoldersPath  
+                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath $solution -resultsFilePath results_windows_dotnet_${{github.run_id}}_${{env.RESTORE_USE_LEGACY_ALGORITHM}}.csv -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore -nugetFoldersPath $nugetFoldersPath  
                   }
               }
           }
@@ -134,7 +134,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: results_windows_dotnet_${{github.run_id}}_${{env.RESTORE_USE_LEGACY_ALGORITHM}}
-          path: results.csv
+          path: results_windows_dotnet_${{github.run_id}}_${{env.RESTORE_USE_LEGACY_ALGORITHM}}.csv
 
   benchmark_dotnet_linux:
     runs-on: ubuntu-latest
@@ -189,7 +189,7 @@ jobs:
                     $sdk = '{"sdk": { "version": "' + $version + '" } }'
                     Set-Content -Path global.json -Value $sdk
                     Get-Content -Path global.json
-                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath dotnet/dotnet -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore -nugetFoldersPath $nugetFoldersPath  
+                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath dotnet/dotnet -solutionFilePath $solution -resultsFilePath results_linux_dotnet_${{github.run_id}}_${{env.RESTORE_USE_LEGACY_ALGORITHM}}.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore -nugetFoldersPath $nugetFoldersPath  
                   }
               }
           }
@@ -198,4 +198,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: results_linux_dotnet_${{github.run_id}}_${{env.RESTORE_USE_LEGACY_ALGORITHM}}
-          path: results.csv
+          path: results_linux_dotnet_${{github.run_id}}_${{env.RESTORE_USE_LEGACY_ALGORITHM}}.csv

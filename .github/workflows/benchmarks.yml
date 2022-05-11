@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  ITERATION_COUNT: 1
+  ITERATION_COUNT: 10
   BASE_VERSION: 6.0.202
   BASE_VERSION_WINDOWS: https://download.visualstudio.microsoft.com/download/pr/b1461027-6daa-467d-aebe-6326343e5840/01656d95b28f16c53cd947a8072d004b/dotnet-sdk-6.0.202-win-x64.zip
   BASE_VERSION_LINUX: https://download.visualstudio.microsoft.com/download/pr/9d8c7137-2091-4fc6-a419-60ba59c8b9de/db0c5cda94f31d2260d369123de32d59/dotnet-sdk-6.0.202-linux-x64.tar.gz
@@ -47,8 +47,8 @@ jobs:
         shell: pwsh
         run: |
           $nugetFoldersPath = [System.IO.Path]::GetFullPath(".nuget")
-          # $solutions = @("NuGet.Client", "orleans", "OrchardCore", "TestSolutions/SanitisedNetCoreApp3.1Centralised/SanitisedNetCoreApp3.1Centralised.sln", "TestSolutions/SanitisedNetCoreApp3.1/SanitisedNetCoreApp3.1.sln")
-          $solutions = @("TestSolutions/SanitisedNetCoreApp3.1Centralised/SanitisedNetCoreApp3.1Centralised.sln", "TestSolutions/SanitisedNetCoreApp3.1/SanitisedNetCoreApp3.1.sln")
+          $solutions = @("NuGet.Client", "orleans", "OrchardCore", "TestSolutions/SanitisedNetCoreApp3.1Centralised/SanitisedNetCoreApp3.1Centralised.sln", "TestSolutions/SanitisedNetCoreApp3.1/SanitisedNetCoreApp3.1.sln")
+          # $solutions = @("TestSolutions/SanitisedNetCoreApp3.1Centralised/SanitisedNetCoreApp3.1Centralised.sln", "TestSolutions/SanitisedNetCoreApp3.1/SanitisedNetCoreApp3.1.sln")
           $versions = @("${{env.DEV_VERSION}}", "${{env.BRANCH_VERSION}}")
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {
@@ -116,8 +116,8 @@ jobs:
         shell: pwsh
         run: |
           $nugetFoldersPath = [System.IO.Path]::GetFullPath(".nuget")
-          # $solutions = @("NuGet.Client", "orleans", "OrchardCore", "TestSolutions/SanitisedNetCoreApp3.1Centralised/SanitisedNetCoreApp3.1Centralised.sln", "TestSolutions/SanitisedNetCoreApp3.1/SanitisedNetCoreApp3.1.sln")
-          $solutions = @("TestSolutions/SanitisedNetCoreApp3.1Centralised/SanitisedNetCoreApp3.1Centralised.sln", "TestSolutions/SanitisedNetCoreApp3.1/SanitisedNetCoreApp3.1.sln")
+          $solutions = @("NuGet.Client", "orleans", "OrchardCore", "TestSolutions/SanitisedNetCoreApp3.1Centralised/SanitisedNetCoreApp3.1Centralised.sln", "TestSolutions/SanitisedNetCoreApp3.1/SanitisedNetCoreApp3.1.sln")
+          # $solutions = @("TestSolutions/SanitisedNetCoreApp3.1Centralised/SanitisedNetCoreApp3.1Centralised.sln", "TestSolutions/SanitisedNetCoreApp3.1/SanitisedNetCoreApp3.1.sln")
           $versions = @("${{env.BASE_VERSION}}-${{env.DEV_VERSION}}", "${{env.BASE_VERSION}}-${{env.BRANCH_VERSION}}", "${{env.BASE_VERSION}}")
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {
@@ -180,8 +180,8 @@ jobs:
         shell: pwsh
         run: |
           $nugetFoldersPath = [System.IO.Path]::GetFullPath(".nuget")
-          # $solutions = @("orleans", "OrchardCore", "TestSolutions/SanitisedNetCoreApp3.1Centralised/SanitisedNetCoreApp3.1Centralised.sln", "TestSolutions/SanitisedNetCoreApp3.1/SanitisedNetCoreApp3.1.sln")
-          $solutions = @("TestSolutions/SanitisedNetCoreApp3.1Centralised/SanitisedNetCoreApp3.1Centralised.sln", "TestSolutions/SanitisedNetCoreApp3.1/SanitisedNetCoreApp3.1.sln")
+          $solutions = @("orleans", "OrchardCore", "TestSolutions/SanitisedNetCoreApp3.1Centralised/SanitisedNetCoreApp3.1Centralised.sln", "TestSolutions/SanitisedNetCoreApp3.1/SanitisedNetCoreApp3.1.sln")
+          # $solutions = @("TestSolutions/SanitisedNetCoreApp3.1Centralised/SanitisedNetCoreApp3.1Centralised.sln", "TestSolutions/SanitisedNetCoreApp3.1/SanitisedNetCoreApp3.1.sln")
           $versions = @("${{env.BASE_VERSION}}-${{env.DEV_VERSION}}", "${{env.BASE_VERSION}}-${{env.BRANCH_VERSION}}", "${{env.BASE_VERSION}}")
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {

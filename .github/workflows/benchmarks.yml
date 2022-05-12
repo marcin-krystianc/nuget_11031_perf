@@ -7,9 +7,9 @@ on:
 
 env:
   ITERATION_COUNT: 10
-  BASE_VERSION: 6.0.202
-  BASE_VERSION_WINDOWS: https://download.visualstudio.microsoft.com/download/pr/b1461027-6daa-467d-aebe-6326343e5840/01656d95b28f16c53cd947a8072d004b/dotnet-sdk-6.0.202-win-x64.zip
-  BASE_VERSION_LINUX: https://download.visualstudio.microsoft.com/download/pr/9d8c7137-2091-4fc6-a419-60ba59c8b9de/db0c5cda94f31d2260d369123de32d59/dotnet-sdk-6.0.202-linux-x64.tar.gz
+  BASE_VERSION: 6.0.300
+  BASE_VERSION_WINDOWS: https://download.visualstudio.microsoft.com/download/pr/cc89c1f6-0d56-46fd-88f9-1fbd8ce074ec/753afbad1926cbc8d28aa4a2dd7d9d66/dotnet-sdk-6.0.300-win-x64.zip
+  BASE_VERSION_LINUX: https://download.visualstudio.microsoft.com/download/pr/dc930bff-ef3d-4f6f-8799-6eb60390f5b4/1efee2a8ea0180c94aff8f15eb3af981/dotnet-sdk-6.0.300-linux-x64.tar.gz
   DEV_VERSION: dev.2d93510ef                    
   BRANCH_VERSION: walker.09c1c99b7
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true

@@ -6,18 +6,21 @@ on:
   workflow_dispatch:
 
 env:
-  ITERATION_COUNT: 5
-  BASE_VERSION: rc.1.21458.32
-  BASE_VERSION_WINDOWS: https://download.visualstudio.microsoft.com/download/pr/575db146-cef0-45f8-8517-c874d62deac7/c63b8d10cc85f237f1a56935d0e85895/dotnet-sdk-6.0.100-rc.1.21458.32-win-x64.zip
-  BASE_VERSION_LINUX: https://download.visualstudio.microsoft.com/download/pr/4880c5a4-9c22-47a7-b298-651f1294a385/795f7828d8684059705e625b33027f89/dotnet-sdk-6.0.100-rc.1.21458.32-linux-x64.tar.gz
-  DEV_VERSION: dev.838751441
-  BRANCH_VERSION: nommap.5a8b1c47a
+  ITERATION_COUNT: 10
+  BASE_VERSION: 6.0.300
+  BASE_VERSION_WINDOWS: https://download.visualstudio.microsoft.com/download/pr/cc89c1f6-0d56-46fd-88f9-1fbd8ce074ec/753afbad1926cbc8d28aa4a2dd7d9d66/dotnet-sdk-6.0.300-win-x64.zip
+  BASE_VERSION_LINUX: https://download.visualstudio.microsoft.com/download/pr/dc930bff-ef3d-4f6f-8799-6eb60390f5b4/1efee2a8ea0180c94aff8f15eb3af981/dotnet-sdk-6.0.300-linux-x64.tar.gz
+  DEV_VERSION: dev.2d93510ef                    
+  BRANCH_VERSION: lockfile.6e50866a0
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
+  RESTORE_USE_LEGACY_ALGORITHM: 0
+
+# -skipForceRestores -skipNoOpRestores -skipColdRestores -skipCleanRestores
 
 jobs:
   benchmark_nuget_windows:
-    runs-on: windows-2019
+    runs-on: windows-latest
     steps:
 
       - name: Checkout
@@ -36,16 +39,23 @@ jobs:
           reg ADD "HKLM\Software\Microsoft\StrongName\Verification\*,*" /f
           reg DELETE "HKLM\Software\Wow6432Node\Microsoft\StrongName\Verification" /f
           reg ADD "HKLM\Software\Wow6432Node\Microsoft\StrongName\Verification\*,*" /f
-
+      
+      - name: Setup .NET Core SDK ${{env.BASE_VERSION}}
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{env.BASE_VERSION}}
+          
       - name: Benchmark
         shell: pwsh
         run: |
-          $solutions = @("NuGet.Client", "OrchardCore", "orleans", "TestSolutions/SanitisedNetCoreApp3.1Centralised")
+          $nugetFoldersPath = [System.IO.Path]::GetFullPath(".nuget")
+          $solutions = @("NuGet.Client", "orleans", "OrchardCore", "TestSolutions/SanitisedNetCoreApp3.1Centralised/SanitisedNetCoreApp3.1Centralised.sln", "TestSolutions/SanitisedNetCoreApp3.1/SanitisedNetCoreApp3.1.sln")
+          # $solutions = @("TestSolutions/SanitisedNetCoreApp3.1Centralised/SanitisedNetCoreApp3.1Centralised.sln", "TestSolutions/SanitisedNetCoreApp3.1/SanitisedNetCoreApp3.1.sln")
           $versions = @("${{env.DEV_VERSION}}", "${{env.BRANCH_VERSION}}")
-          For ($i=0; $i -lt 2; $i++) {
+          For ($i=0; $i -lt 2; $i++) { 
               ForEach ($solution In $solutions) {
                   ForEach ($version In $versions) {
-                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\$version\NuGet.CommandLine\bin\Release\net472\NuGet.exe  -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
+                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\artifacts\$version\NuGet.CommandLine\bin\Release\net472\NuGet.exe  -solutionFilePath $solution -resultsFilePath results_windows_nuget_${{github.run_id}}_${{env.RESTORE_USE_LEGACY_ALGORITHM}}.csv -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore -nugetFoldersPath $nugetFoldersPath -skipNoOpRestores -skipColdRestores -skipCleanRestores
                   }
               }
           }
@@ -53,8 +63,8 @@ jobs:
       - name: Upload test results
         uses: actions/upload-artifact@v2
         with:
-          name: results_windows_nuget
-          path: results.csv
+          name: results_windows_nuget_${{github.run_id}}_${{env.RESTORE_USE_LEGACY_ALGORITHM}}
+          path: results_windows_nuget_${{github.run_id}}_${{env.RESTORE_USE_LEGACY_ALGORITHM}}.csv
 
   benchmark_dotnet_windows:
     runs-on: windows-latest
@@ -63,7 +73,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         
-      - name: Download .NET Core SDK 6.0.100-${{env.BASE_VERSION}}
+      - name: Download .NET Core SDK ${{env.BASE_VERSION}}
         shell: pwsh
         run: |
           curl -sSL ${{env.BASE_VERSION_WINDOWS}} -o dotnet.zip
@@ -76,12 +86,15 @@ jobs:
         run: |
           $versions = @("${{env.DEV_VERSION}}", "${{env.BRANCH_VERSION}}")
           ForEach ($version In $versions) {
-              Copy-Item -Path .\dotnet\sdk\6.0.100-${{env.BASE_VERSION}} -Destination .\dotnet\sdk\6.0.100-$version -Recurse
-              Copy-Item -Path .\artifacts\$version\NuGet.Build.Tasks\bin\Release\netstandard2.0\* -Destination .\dotnet\sdk\6.0.100-$version
-              $content = Get-Content -Path .\dotnet\sdk\6.0.100-$version\.version
-              $newcontent = $content -replace "6.0.100-${{env.BASE_VERSION}}", "6.0.100-$version"
-              Set-Content -Path .\dotnet\sdk\6.0.100-$version\.version -Value $newcontent
+              Copy-Item -Path .\dotnet\sdk\${{env.BASE_VERSION}} -Destination .\dotnet\sdk\${{env.BASE_VERSION}}-$version -Recurse
+              Copy-Item -Path .\artifacts\$version\NuGet.Build.Tasks.Console\bin\Release\netcoreapp5.0\* -Destination .\dotnet\sdk\${{env.BASE_VERSION}}-$version 
+              $content = Get-Content -Path .\dotnet\sdk\${{env.BASE_VERSION}}-$version\.version
+              $newcontent = $content -replace "${{env.BASE_VERSION}}", "${{env.BASE_VERSION}}-$version"
+              Set-Content -Path .\dotnet\sdk\${{env.BASE_VERSION}}-$version\.version -Value $newcontent
+              Get-Content -Path .\dotnet\sdk\${{env.BASE_VERSION}}-$version\.version
           }
+          Get-ChildItem .
+          Get-ChildItem .\dotnet\sdk\
 
       - name: Checkout test solutions
         shell: pwsh
@@ -104,14 +117,17 @@ jobs:
       - name: Benchmark
         shell: pwsh
         run: |
-          $solutions = @("NuGet.Client", "OrchardCore", "orleans", "TestSolutions/SanitisedNetCoreApp3.1Centralised")
-          $versions = @("${{env.DEV_VERSION}}", "${{env.BRANCH_VERSION}}", "${{env.BASE_VERSION}}")
+          $nugetFoldersPath = [System.IO.Path]::GetFullPath(".nuget")
+          $solutions = @("NuGet.Client", "orleans", "OrchardCore", "TestSolutions/SanitisedNetCoreApp3.1Centralised/SanitisedNetCoreApp3.1Centralised.sln", "TestSolutions/SanitisedNetCoreApp3.1/SanitisedNetCoreApp3.1.sln")
+          # $solutions = @("TestSolutions/SanitisedNetCoreApp3.1Centralised/SanitisedNetCoreApp3.1Centralised.sln", "TestSolutions/SanitisedNetCoreApp3.1/SanitisedNetCoreApp3.1.sln")
+          $versions = @("${{env.BASE_VERSION}}-${{env.DEV_VERSION}}", "${{env.BASE_VERSION}}-${{env.BRANCH_VERSION}}", "${{env.BASE_VERSION}}")
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {
                   ForEach ($version In $versions) {
-                    $sdk = '{"sdk": { "version": "6.0.100-' + $version + '" } }'
+                    $sdk = '{"sdk": { "version": "' + $version + '" } }'
                     Set-Content -Path global.json -Value $sdk   
-                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
+                    Get-Content -Path global.json
+                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath .\dotnet\dotnet.exe -solutionFilePath $solution -resultsFilePath results_windows_dotnet_${{github.run_id}}_${{env.RESTORE_USE_LEGACY_ALGORITHM}}.csv -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore -nugetFoldersPath $nugetFoldersPath -skipNoOpRestores -skipColdRestores -skipCleanRestores
                   }
               }
           }
@@ -119,8 +135,8 @@ jobs:
       - name: Upload test results
         uses: actions/upload-artifact@v2
         with:
-          name: results_windows_dotnet
-          path: results.csv
+          name: results_windows_dotnet_${{github.run_id}}_${{env.RESTORE_USE_LEGACY_ALGORITHM}}
+          path: results_windows_dotnet_${{github.run_id}}_${{env.RESTORE_USE_LEGACY_ALGORITHM}}.csv
 
   benchmark_dotnet_linux:
     runs-on: ubuntu-latest
@@ -129,7 +145,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         
-      - name: Download .NET Core SDK 6.0.100-${{env.BASE_VERSION}}
+      - name: Download .NET Core SDK ${{env.BASE_VERSION}}
         shell: pwsh
         run: |
           curl -sSL ${{env.BASE_VERSION_LINUX}} -o dotnet.tar.gz
@@ -143,12 +159,14 @@ jobs:
         run: |
           $versions = @("${{env.DEV_VERSION}}", "${{env.BRANCH_VERSION}}")
           ForEach ($version In $versions) {
-              Copy-Item -Path .\dotnet\sdk\6.0.100-${{env.BASE_VERSION}} -Destination .\dotnet\sdk\6.0.100-$version -Recurse
-              Copy-Item -Path .\artifacts\$version\NuGet.Build.Tasks\bin\Release\netstandard2.0\* -Destination .\dotnet\sdk\6.0.100-$version
-              $content = Get-Content -Path .\dotnet\sdk\6.0.100-$version\.version
-              $newcontent = $content -replace "6.0.100-${{env.BASE_VERSION}}", "6.0.100-$version"
-              Set-Content -Path .\dotnet\sdk\6.0.100-$version\.version -Value $newcontent
+              Copy-Item -Path .\dotnet\sdk\${{env.BASE_VERSION}} -Destination .\dotnet\sdk\${{env.BASE_VERSION}}-$version -Recurse
+              Copy-Item -Path .\artifacts\$version\NuGet.Build.Tasks.Console\bin\Release\netcoreapp5.0\* -Destination .\dotnet\sdk\${{env.BASE_VERSION}}-$version
+              $content = Get-Content -Path .\dotnet\sdk\${{env.BASE_VERSION}}-$version\.version
+              $newcontent = $content -replace "${{env.BASE_VERSION}}", "${{env.BASE_VERSION}}-$version"
+              Set-Content -Path .\dotnet\sdk\${{env.BASE_VERSION}}-$version\.version -Value $newcontent
           }
+          Get-ChildItem .
+          Get-ChildItem .\dotnet\sdk\
 
       - name: Checkout test solutions
         shell: pwsh
@@ -163,14 +181,17 @@ jobs:
       - name: Benchmark
         shell: pwsh
         run: |
-          $solutions = @("OrchardCore", "orleans", "TestSolutions/SanitisedNetCoreApp3.1Centralised")
-          $versions = @("${{env.DEV_VERSION}}", "${{env.BRANCH_VERSION}}", "${{env.BASE_VERSION}}")
+          $nugetFoldersPath = [System.IO.Path]::GetFullPath(".nuget")
+          $solutions = @("orleans", "OrchardCore", "TestSolutions/SanitisedNetCoreApp3.1Centralised/SanitisedNetCoreApp3.1Centralised.sln", "TestSolutions/SanitisedNetCoreApp3.1/SanitisedNetCoreApp3.1.sln")
+          # $solutions = @("TestSolutions/SanitisedNetCoreApp3.1Centralised/SanitisedNetCoreApp3.1Centralised.sln", "TestSolutions/SanitisedNetCoreApp3.1/SanitisedNetCoreApp3.1.sln")
+          $versions = @("${{env.BASE_VERSION}}-${{env.DEV_VERSION}}", "${{env.BASE_VERSION}}-${{env.BRANCH_VERSION}}", "${{env.BASE_VERSION}}")
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {
                   ForEach ($version In $versions) {
-                    $sdk = '{"sdk": { "version": "6.0.100-' + $version + '" } }'
+                    $sdk = '{"sdk": { "version": "' + $version + '" } }'
                     Set-Content -Path global.json -Value $sdk
-                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath dotnet/dotnet -solutionFilePath $solution -resultsFilePath results.csv -skipForceRestores -skipNoOpRestores -skipColdRestores -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore
+                    Get-Content -Path global.json
+                    .\scripts\perftests\RunPerformanceTests.ps1 -nugetClientFilePath dotnet/dotnet -solutionFilePath $solution -resultsFilePath results_linux_dotnet_${{github.run_id}}_${{env.RESTORE_USE_LEGACY_ALGORITHM}}.csv -iterationCount ${{env.ITERATION_COUNT}} -staticGraphRestore -nugetFoldersPath $nugetFoldersPath -skipNoOpRestores -skipColdRestores -skipCleanRestores
                   }
               }
           }
@@ -178,5 +199,5 @@ jobs:
       - name: Upload test results
         uses: actions/upload-artifact@v2
         with:
-          name: results_linux_dotnet
-          path: results.csv
+          name: results_linux_dotnet_${{github.run_id}}_${{env.RESTORE_USE_LEGACY_ALGORITHM}}
+          path: results_linux_dotnet_${{github.run_id}}_${{env.RESTORE_USE_LEGACY_ALGORITHM}}.csv

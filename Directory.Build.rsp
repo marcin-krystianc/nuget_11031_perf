@@ -1,0 +1,2 @@
+# See https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild-response-files
+/p:NoWarn=NU1505

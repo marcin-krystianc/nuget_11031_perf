@@ -156,11 +156,11 @@ Function LocalsClearAll([string] $nugetClientFilePath)
     $nugetClientFilePath = GetAbsolutePath $nugetClientFilePath
     If ($(IsClientDotnetExe $nugetClientFilePath))
     {
-        . $nugetClientFilePath nuget locals -c all *>>$null
+        . $nugetClientFilePath nuget locals -c all >>$null
     }
     Elseif($(IsClientMSBuildExe $nugetClientFilePath))
     {
-        . dotnet.exe nuget locals -c all *>>$null
+        . dotnet.exe nuget locals -c all >>$null
     }
     Else
     {
@@ -343,7 +343,7 @@ Function RunRestore(
 {
     $isClientDotnetExe = IsClientDotnetExe $nugetClientFilePath
     $isClientMSBuild = IsClientMSBuildExe $nugetClientFilePath
-
+			
     If ($isClientDotnetExe -And $isPackagesConfig)
     {
         Log "dotnet.exe does not support packages.config restore." "Red"
@@ -381,11 +381,11 @@ Function RunRestore(
 
         If ($isClientDotnetExe)
         {
-            . $nugetClientFilePath nuget locals -c $localsArguments *
+            . $nugetClientFilePath nuget locals -c $localsArguments
         }
         ElseIf($isClientMSBuild)
         {
-            . dotnet.exe nuget locals -c $localsArguments *>>$null
+            . dotnet.exe nuget locals -c $localsArguments >>$null
         }
         Else
         {

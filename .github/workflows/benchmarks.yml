@@ -8,8 +8,8 @@ on:
 env:
   ITERATION_COUNT: 2
   BASE_VERSION: 7.0.100
-  BASE_VERSION_WINDOWS: https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-7.0.100-windows-x64-binaries
-  BASE_VERSION_LINUX: https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-7.0.100-linux-x64-binaries
+  BASE_VERSION_WINDOWS: https://download.visualstudio.microsoft.com/download/pr/1fb808dc-d017-4460-94f8-bf1ac83e6cd8/756b301e714755e411b84684b885a516/dotnet-sdk-7.0.100-win-x64.zip
+  BASE_VERSION_LINUX: https://download.visualstudio.microsoft.com/download/pr/253e5af8-41aa-48c6-86f1-39a51b44afdc/5bb2cb9380c5b1a7f0153e0a2775727b/dotnet-sdk-7.0.100-linux-x64.tar.gz
   DEV_VERSION: dev.2d93510ef                    
   BRANCH_VERSION: walker.0f4f837af
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true

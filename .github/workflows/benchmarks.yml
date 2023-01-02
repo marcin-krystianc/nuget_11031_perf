@@ -121,7 +121,7 @@ jobs:
           #$solutions = @("NuGet.Client", "orleans", "OrchardCore", "TestSolutions/SanitisedNetCoreApp3.1Centralised/SanitisedNetCoreApp3.1Centralised.sln", "TestSolutions/SanitisedNetCoreApp3.1/SanitisedNetCoreApp3.1.sln")
           $solutions = @("TestSolutions/LargeAppWithPrivatePackages/solution/LargeAppWithPrivatePackages.sln", "TestSolutions/LargeAppWithPrivatePackagesCentralised/solution/LargeAppWithPrivatePackagesCentralised.sln")
           $versions = @("${{env.BASE_VERSION}}")
-          // $versions = @("${{env.BASE_VERSION}}-${{env.DEV_VERSION}}", "${{env.BASE_VERSION}}-${{env.BRANCH_VERSION}}", "${{env.BASE_VERSION}}")
+          # $versions = @("${{env.BASE_VERSION}}-${{env.DEV_VERSION}}", "${{env.BASE_VERSION}}-${{env.BRANCH_VERSION}}", "${{env.BASE_VERSION}}")
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {
                   ForEach ($version In $versions) {
@@ -186,7 +186,7 @@ jobs:
           #$solutions = @("orleans", "OrchardCore", "TestSolutions/SanitisedNetCoreApp3.1Centralised/SanitisedNetCoreApp3.1Centralised.sln", "TestSolutions/SanitisedNetCoreApp3.1/SanitisedNetCoreApp3.1.sln")
           $solutions = @("TestSolutions/LargeAppWithPrivatePackages/solution/LargeAppWithPrivatePackages.sln", "TestSolutions/LargeAppWithPrivatePackagesCentralised/solution/LargeAppWithPrivatePackagesCentralised.sln")
           $versions = @("${{env.BASE_VERSION}}")
-          // $versions = @("${{env.BASE_VERSION}}-${{env.DEV_VERSION}}", "${{env.BASE_VERSION}}-${{env.BRANCH_VERSION}}", "${{env.BASE_VERSION}}")
+          # $versions = @("${{env.BASE_VERSION}}-${{env.DEV_VERSION}}", "${{env.BASE_VERSION}}-${{env.BRANCH_VERSION}}", "${{env.BASE_VERSION}}")
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {
                   ForEach ($version In $versions) {

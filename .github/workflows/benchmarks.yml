@@ -7,9 +7,9 @@ on:
 
 env:
   ITERATION_COUNT: 2
-  BASE_VERSION: 6.0.300
-  BASE_VERSION_WINDOWS: https://download.visualstudio.microsoft.com/download/pr/cc89c1f6-0d56-46fd-88f9-1fbd8ce074ec/753afbad1926cbc8d28aa4a2dd7d9d66/dotnet-sdk-6.0.300-win-x64.zip
-  BASE_VERSION_LINUX: https://download.visualstudio.microsoft.com/download/pr/dc930bff-ef3d-4f6f-8799-6eb60390f5b4/1efee2a8ea0180c94aff8f15eb3af981/dotnet-sdk-6.0.300-linux-x64.tar.gz
+  BASE_VERSION: 7.0.100
+  BASE_VERSION_WINDOWS: https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-7.0.100-windows-x64-binaries
+  BASE_VERSION_LINUX: https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-7.0.100-linux-x64-binaries
   DEV_VERSION: dev.2d93510ef                    
   BRANCH_VERSION: walker.0f4f837af
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
@@ -120,7 +120,8 @@ jobs:
           $nugetFoldersPath = [System.IO.Path]::GetFullPath(".nuget")
           #$solutions = @("NuGet.Client", "orleans", "OrchardCore", "TestSolutions/SanitisedNetCoreApp3.1Centralised/SanitisedNetCoreApp3.1Centralised.sln", "TestSolutions/SanitisedNetCoreApp3.1/SanitisedNetCoreApp3.1.sln")
           $solutions = @("TestSolutions/LargeAppWithPrivatePackages/solution/LargeAppWithPrivatePackages.sln", "TestSolutions/LargeAppWithPrivatePackagesCentralised/solution/LargeAppWithPrivatePackagesCentralised.sln")
-          $versions = @("${{env.BASE_VERSION}}-${{env.DEV_VERSION}}", "${{env.BASE_VERSION}}-${{env.BRANCH_VERSION}}", "${{env.BASE_VERSION}}")
+          $versions = @("${{env.BASE_VERSION}}")
+          // $versions = @("${{env.BASE_VERSION}}-${{env.DEV_VERSION}}", "${{env.BASE_VERSION}}-${{env.BRANCH_VERSION}}", "${{env.BASE_VERSION}}")
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {
                   ForEach ($version In $versions) {
@@ -184,7 +185,8 @@ jobs:
           $nugetFoldersPath = [System.IO.Path]::GetFullPath(".nuget")
           #$solutions = @("orleans", "OrchardCore", "TestSolutions/SanitisedNetCoreApp3.1Centralised/SanitisedNetCoreApp3.1Centralised.sln", "TestSolutions/SanitisedNetCoreApp3.1/SanitisedNetCoreApp3.1.sln")
           $solutions = @("TestSolutions/LargeAppWithPrivatePackages/solution/LargeAppWithPrivatePackages.sln", "TestSolutions/LargeAppWithPrivatePackagesCentralised/solution/LargeAppWithPrivatePackagesCentralised.sln")
-          $versions = @("${{env.BASE_VERSION}}-${{env.DEV_VERSION}}", "${{env.BASE_VERSION}}-${{env.BRANCH_VERSION}}", "${{env.BASE_VERSION}}")
+          $versions = @("${{env.BASE_VERSION}}")
+          // $versions = @("${{env.BASE_VERSION}}-${{env.DEV_VERSION}}", "${{env.BASE_VERSION}}-${{env.BRANCH_VERSION}}", "${{env.BASE_VERSION}}")
           For ($i=0; $i -lt 2; $i++) {
               ForEach ($solution In $solutions) {
                   ForEach ($version In $versions) {
